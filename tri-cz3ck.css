@@ -1,0 +1,25 @@
+div { font-family: Calibri !important; }
+.ui-effects-transfer { border: 2px dotted gray; }
+.halve { width:48%; }
+
+.selectable .ui-selecting { background: #FECA40; }
+.selectable .ui-selected { }
+.selectable .ui-highlited { background: #FECA40; }
+
+.selectable { list-style-type: none; margin: 0; padding: 0; }
+.selectable li { margin: 1% 0.75%; float: left; width: 48%; height: 80px; cursor: pointer; }
+
+.employee span.name { float: left; margin: 10px 0px 0px 10px; }
+.employee button { float: right; margin: 5px 5px 0px 0px; font-size: 0.5em !important; }
+
+.left { float: left; }
+.right { float: right; }
+.clear { clear: both; }
+
+.ui-button-icon-only .ui-icon { zoom: 200%; width:32px; height: 32px; top:0px; left:0px; margin-top:2px; margin-left:2px; }
+
+.ui-accordion .ui-accordion-content {
+	padding: 1% 2%;
+}
+/* TODO reduce/fix margins of accordion */
+/* TODO add placeholder for images/actions in selectable */
