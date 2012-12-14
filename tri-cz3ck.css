@@ -16,7 +16,7 @@ div { font-family: Calibri !important; }
 .right { float: right; }
 .clear { clear: both; }
 
-.ui-button-icon-only .ui-icon { zoom: 200%; width:32px; height: 32px; top:0px; left:0px; margin-top:2px; margin-left:2px; }
+.ui-button-icon-only .ui-icon { zoom: 200%; width:16px; height: 16px; top:0px; left:0px; margin-top:2px; margin-left:2px; }
 
 .ui-accordion .ui-accordion-content {
 	padding: 1% 2%;

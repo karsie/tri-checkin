@@ -48,7 +48,7 @@ var EmployeeListView = Backbone.View.extend({
 		var page = Math.floor(index / this.options.pageSize);
 		
 		var employeeView = new EmployeeView({ model: model });
-		this.pageViews[page].$pageSelectable.append(employeeView.render().el);
+		this.pageViews[page].$pageSelectable.append(employeeView.render().el.firstChild);
 	},
 	
 	renderButtons: function(buttons) {
