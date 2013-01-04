@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8" />
 		<title>tri-cz3ck</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<link rel="stylesheet" href="/css/libs/jquery-ui-min.css"/>
 		<link rel="stylesheet" href="/css/tri-cz3ck.css"/>
 		<script type="text/javascript" src="/js/libs/jquery-min.js"></script>

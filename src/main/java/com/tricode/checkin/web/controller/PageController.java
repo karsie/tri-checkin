@@ -4,10 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("index")
-public class IndexController {
+public class PageController {
 
-    @RequestMapping
+    @RequestMapping("index")
     public void index() {
+    }
+
+    @RequestMapping("report")
+    public void report() {
+
     }
 }
