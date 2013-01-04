@@ -227,6 +227,7 @@ function selectingCallback(selected, sourceView, targetView) {
 		var id = selected.attr('id').substring(3);
 		var model = sourceView.collection.get(id);
 		model.set('status', targetView.options.status);
+        model.save();
 		
 		
 		$('#emp' + model.get('id')).addClass('ui-highlited');
