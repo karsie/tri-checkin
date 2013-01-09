@@ -1,18 +1,19 @@
-package com.tricode.checkin.web.model;
+package com.tricode.checkin.model;
 
 public class Person {
 
-    private String id;
+    private Integer id;
     private String name;
     private String first;
     private String last;
     private LocationStatus status;
     private boolean added;
+    private long signInTime;
 
     public Person() {
     }
-    
-    public Person(String id, String first, String last) {
+
+    public Person(Integer id, String first, String last) {
         this.id = id;
         this.first = first;
         this.last = last;
@@ -21,11 +22,11 @@ public class Person {
         this.added = false;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -67,5 +68,26 @@ public class Person {
 
     public void setAdded(boolean added) {
         this.added = added;
+    }
+
+    public long getSignInTime() {
+        return signInTime;
+    }
+
+    public void setSignInTime(long signInTime) {
+        this.signInTime = signInTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", first='" + first + '\'' +
+                ", last='" + last + '\'' +
+                ", status=" + status +
+                ", added=" + added +
+                ", signInTime=" + signInTime +
+                '}';
     }
 }

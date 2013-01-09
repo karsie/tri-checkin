@@ -8,14 +8,20 @@
     <context:annotation-config/>
 
     <mvc:annotation-driven />
-    
-    <!-- load all controllers -->
-    <context:component-scan base-package="com.tricode.checkin.web.controller"/>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <!-- load events -->
+    <context:component-scan base-package="com.tricode.checkin.event"/>
+
+    <!-- load services -->
+    <context:component-scan base-package="com.tricode.checkin.service"/>
+
+    <!-- load controllers -->
+    <context:component-scan base-package="com.tricode.checkin.web.controller"/>
 
 </beans>

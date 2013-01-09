@@ -39,3 +39,12 @@ var EmployeesByStatus = Backbone.Subset.extend({
 		return this.sortAttribute;
 	}
 });
+
+var ReportData = Backbone.Model.extend({
+    idAttribute: 'userId'
+});
+
+var ReportDataList = Backbone.Collection.extend({
+    model: ReportData,
+    url: '/checkin/report/list'
+});

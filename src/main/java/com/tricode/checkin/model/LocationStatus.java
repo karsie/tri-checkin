@@ -1,4 +1,4 @@
-package com.tricode.checkin.web.model;
+package com.tricode.checkin.model;
 
 public enum LocationStatus {
 

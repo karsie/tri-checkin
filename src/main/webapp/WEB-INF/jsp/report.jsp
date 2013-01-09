@@ -10,16 +10,44 @@
         }
     </style>
     <script type="text/javascript" src="/js/libs/jquery-min.js"></script>
+    <script type="text/javascript" src="/js/libs/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/libs/backbone-min.js"></script>
+    <script type="text/javascript" src="/js/libs/backbone.subset.js"></script>
+    <script type="text/javascript" src="/js/tri-cz3ck-models.js"></script>
     <script type="text/javascript" src="/js/libs/jcanvas.min.js"></script>
     <script type="text/javascript">
+        var reportList = new ReportDataList;
         $(function() {
-            var pts = [
-                [0, 20, 80],
-                [100, 50, 35],
-                [200, 10, 90],
-                [300, 0, 100],
-                [400, 17.5, 82.5]
-            ];
+            reportList.fetch({
+                success: function () {
+                    reportList.forEach(drawCanvas);
+                }
+            });
+        });
+
+        function drawCanvas(model) {
+            var days = model.get('days');
+
+            var max = 0;
+            var pts = [];
+
+            for (var i = 0; i < days.length; i++) {
+                pts.push([i * 100, 0, days[i], 0]);
+
+                if (days[i] > max) {
+                    max = days[i];
+                }
+            }
+
+            if (max == 0) {
+                return;
+            }
+
+            for (var p = 0; p < pts.length; p++) {
+                var percentOfMax = (100 * pts[p][2] / max);
+                pts[p][1] = 100 - percentOfMax;
+                pts[p][3] = percentOfMax;
+            }
 
             var padding = 9;
 
@@ -36,7 +64,7 @@
                 line['x' + pid] = padding + pts[p][0];
                 line['y' + pid] = padding + pts[p][1];
             }
-//				$canvas.drawLine(line);
+			$canvas.drawLine(line);
 
             /*$canvas.drawRect({
              layer: true,
@@ -62,7 +90,7 @@
                  x: padding + pts[p][0], y: padding + pts[p][1],
                  radius: 7
                  });*/
-                $canvas.drawArc({
+                /*$canvas.drawArc({
                  						layer: true,
 //                 name: 'p' + pid,
 //                 fillStyle: '#36b',
@@ -80,7 +108,7 @@
                  //						mouseout: function(layer) {
                  //							$canvas.setLayer('ph' + layer.pid, { visible: false });
                  //						}
-                 });
+                 });*/
                 /*drawArc(document.getElementById('canvas'), {
                     x: padding + pts[p][0], y: padding + pts[p][1],
                     radius: 50
@@ -88,7 +116,7 @@
             }
 //				$canvas.drawLayers();
 
-        });
+        }
 
 function drawArc(canvas, arc) {
 var ctx = canvas.getContext('2d');

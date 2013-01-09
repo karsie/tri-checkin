@@ -10,8 +10,4 @@ public class PageController {
     public void index() {
     }
 
-    @RequestMapping("report")
-    public void report() {
-
-    }
 }
