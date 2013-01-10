@@ -1,12 +1,12 @@
 package com.tricode.checkin.service.impl;
 
-import com.tricode.checkin.event.EventManager;
+import com.tricode.checkin.event.manager.EventManager;
 import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static org.springframework.util.Assert.notNull;
 
-@Component
+@Service
 public class InMemoryPersonService implements PersonService {
 
     private static final Object newPersonLock = new Object();
@@ -61,9 +61,9 @@ public class InMemoryPersonService implements PersonService {
         }
 
         if (person.getId() != null) {
-            persons.put(person.getId(), person);
+            final Person oldValue = persons.put(person.getId(), person);
 
-            eventManager.raiseUpdateEvent(person);
+            eventManager.raiseUpdateEvent(oldValue, person);
         }
         return person;
     }

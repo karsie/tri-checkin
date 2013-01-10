@@ -1,7 +1,7 @@
 package com.tricode.checkin.web.controller;
 
 import com.tricode.checkin.model.Person;
-import com.tricode.checkin.model.ReportData;
+import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.service.PersonService;
 import com.tricode.checkin.service.ReportingService;
 import org.joda.time.DateTime;
@@ -35,11 +35,11 @@ public class ReportingController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection<ReportData> getReportData() {
+    Collection<WeekReport> getReportData() {
         final DateTime currentDate = new DateTime();
         final Collection<Person> persons = personService.list();
 
-        final Collection<ReportData> results = new ArrayList<ReportData>(persons.size());
+        final Collection<WeekReport> results = new ArrayList<WeekReport>(persons.size());
 
         for (Person person : persons) {
             results.add(reportingService.get(person.getId(), currentDate.getWeekyear(), currentDate.getWeekOfWeekyear()));

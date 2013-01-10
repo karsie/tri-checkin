@@ -1,11 +1,11 @@
 package com.tricode.checkin.service;
 
-import com.tricode.checkin.model.ReportData;
+import com.tricode.checkin.model.WeekReport;
 
 public interface ReportingService {
 
-    ReportData get(int userId, int year, int week);
+    WeekReport get(int userId, int year, int week);
 
-    ReportData save(ReportData reportData);
+    WeekReport save(WeekReport weekReport);
 
 }

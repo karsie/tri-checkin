@@ -1,20 +1,15 @@
 package com.tricode.checkin.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-public class ReportData {
+public class WeekReport {
     private int userId;
     private int year;
     private int week;
     private List<Long> days;
 
-    public ReportData() {
-    }
-
-    public ReportData(int userId, int year, int week) {
+    public WeekReport(int userId, int year, int week) {
         this.userId = userId;
         this.year = year;
         this.week = week;
