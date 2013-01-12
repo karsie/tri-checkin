@@ -27,7 +27,12 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
     public void onEvent(StatusChangeLog objectBefore, StatusChangeLog objectAfter, EventType eventType) {
         if (objectAfter.getStatusTo() == LocationStatus.OUT) {
             final DateTime signOutTime = new DateTime(objectAfter.getTimestamp());
-            final int dayIndex = signOutTime.getDayOfWeek() - 1; // MONDAY = 1, so index = 0
+            int dayIndex = signOutTime.getDayOfWeek() - 1; // MONDAY = 1, so index = 0
+            if (dayIndex == -1) { // SUNDAY
+                dayIndex = 0; // becomes MONDAY
+            } else if (dayIndex == 5) { // SATURDAY
+                dayIndex = 4; // becomes FRIDAY
+            }
 
             final StatusChangeLog lastStatus = logService.getLastStatusChangeForUser(objectAfter.getUserId(), LocationStatus.IN);
 
