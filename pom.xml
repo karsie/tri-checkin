@@ -50,11 +50,11 @@
         </dependency>
 
         <!-- Jackson JSON Mapper -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.9</version>
-		</dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.9</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -66,7 +66,6 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -79,6 +78,55 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <!--<warSourceExcludes>**/src/*.js,**/js/*.js</warSourceExcludes>-->
+                    <warSourceExcludes>**/src/*.js</warSourceExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.samaxes.maven</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <charset>utf-8</charset>
+                    <skipMerge>true</skipMerge>
+                    <suffix>-min</suffix>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>minify-libs</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <jsSourceDir>js/libs/src</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsSourceFile>backbone.subset.js</jsSourceFile>
+                            </jsSourceFiles>
+                            <jsTargetDir>js/libs</jsTargetDir>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <!--<execution>
+                        <id>minify-tri-cz3ck</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <jsSourceFiles>
+                                <jsSourceFile>tri-cz3ck-load.js</jsSourceFile>
+                                <jsSourceFile>tri-cz3ck-models.js</jsSourceFile>
+                                <jsSourceFile>tri-cz3ck-views.js</jsSourceFile>
+                            </jsSourceFiles>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>-->
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -12,9 +12,9 @@
     <script type="text/javascript" src="/js/libs/jquery-min.js"></script>
     <script type="text/javascript" src="/js/libs/underscore-min.js"></script>
     <script type="text/javascript" src="/js/libs/backbone-min.js"></script>
-    <script type="text/javascript" src="/js/libs/backbone.subset.js"></script>
+    <script type="text/javascript" src="/js/libs/backbone.subset.min.js"></script>
     <script type="text/javascript" src="/js/tri-cz3ck-models.js"></script>
-    <script type="text/javascript" src="/js/libs/jcanvas.min.js"></script>
+    <script type="text/javascript" src="/js/libs/jcanvas.min.jcanvas-min.js"></script>
     <script type="text/javascript">
         var reportList = new ReportDataList;
         $(function() {
