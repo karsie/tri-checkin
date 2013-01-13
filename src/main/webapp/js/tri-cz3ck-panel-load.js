@@ -4,22 +4,28 @@ requirejs.config({
             deps: ['libs/underscore-min', 'libs/jquery-min'],
             exports: 'Backbone'
         },
-        'libs/backbone.subset-min': {
+        'libs/backbone.subset${minifySuffix}': {
             deps: ['libs/backbone-min']
         },
         'libs/jquery-ui-min': {
-            deps: ['libs/jquery-min']
+            deps: ['libs/jquery-min', 'libs/require-css${minifySuffix}'],
+            init: function () {
+                requireCss("libs/jquery-ui-min");
+            }
         },
-        'tri-cz3ck-models': {
-            deps: ['libs/backbone-min', 'libs/backbone.subset-min']
+        'tri-cz3ck-models${minifySuffix}': {
+            deps: ['libs/backbone-min', 'libs/backbone.subset${minifySuffix}']
         },
-        'tri-cz3ck-panel-views': {
-            deps: ['tri-cz3ck-models', 'libs/jquery-ui-min']
+        'tri-cz3ck-panel-views${minifySuffix}': {
+            deps: ['tri-cz3ck-models${minifySuffix}', 'libs/jquery-ui-min', 'libs/require-css${minifySuffix}'],
+            init: function() {
+                requireCss("tri-cz3ck${minifySuffix}");
+            }
         }
     }
 });
 
-define(['tri-cz3ck-panel-views'], function () {
+define(['tri-cz3ck-panel-views${minifySuffix}'], function () {
     var all = new Employees;
     var outside = new EmployeesByStatus(undefined, { parent: all, status: 'OUT' });
     var inside = new EmployeesByStatus(undefined, { parent: all, status: 'IN' });
