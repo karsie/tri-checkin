@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/**
- */
 @Component
 public class PersonXmlLoaderTask {
 
@@ -21,7 +19,7 @@ public class PersonXmlLoaderTask {
     }
 
 //    @Scheduled(cron = "0 3 * * * ?")
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "5 * * * * ?")
     public void load() {
         try {
             checkinConfig.getXmlFile();

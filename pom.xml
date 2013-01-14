@@ -14,6 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xmlDataFile>${basedir}/Data.xml</xmlDataFile>
     </properties>
 
     <dependencies>
@@ -69,6 +70,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -134,7 +141,6 @@
                                             <filtering>true</filtering>
                                             <excludes>
                                                 <exclude>js/libs/src/*.js</exclude>
-
                                             </excludes>
                                         </resource>
                                     </resources>
@@ -225,11 +231,10 @@
                                 <configuration>
                                     <webappSourceDir>${project.build.directory}/webapp</webappSourceDir>
                                     <jsSourceDir>js/libs/src</jsSourceDir>
-                                    <jsSourceFiles>
-                                        <jsSourceFile>backbone.subset.js</jsSourceFile>
-                                        <jsSourceFile>require-css.js</jsSourceFile>
-                                    </jsSourceFiles>
                                     <jsTargetDir>js/libs</jsTargetDir>
+                                    <jsIncludes>
+                                        <include>*.js</include>
+                                    </jsIncludes>
                                 </configuration>
                                 <goals>
                                     <goal>minify</goal>
@@ -239,14 +244,12 @@
                                 <id>minify-tri-cz3ck</id>
                                 <configuration>
                                     <webappSourceDir>${project.build.directory}/webapp</webappSourceDir>
-                                    <cssFiles>
-                                        <cssFile>tri-cz3ck.css</cssFile>
-                                    </cssFiles>
-                                    <jsSourceFiles>
-                                        <jsSourceFile>tri-cz3ck-models.js</jsSourceFile>
-                                        <jsSourceFile>tri-cz3ck-panel-load.js</jsSourceFile>
-                                        <jsSourceFile>tri-cz3ck-panel-views.js</jsSourceFile>
-                                    </jsSourceFiles>
+                                    <cssIncludes>
+                                        <include>*.css</include>
+                                    </cssIncludes>
+                                    <jsIncludes>
+                                        <include>*.js</include>
+                                    </jsIncludes>
                                 </configuration>
                                 <goals>
                                     <goal>minify</goal>
