@@ -35,7 +35,7 @@ public class InMemoryPersonService implements PersonService {
     }
 
     @Override
-    public Person get(Integer id) {
+    public Person get(int id) {
         return persons.get(id);
     }
 
@@ -63,7 +63,11 @@ public class InMemoryPersonService implements PersonService {
         if (person.getId() != null) {
             final Person oldValue = persons.put(person.getId(), person);
 
-            eventManager.raiseUpdateEvent(oldValue, person);
+            if (oldValue != null) {
+                eventManager.raiseUpdateEvent(oldValue, person);
+            } else {
+                eventManager.raiseCreateEvent(person);
+            }
         }
         return person;
     }

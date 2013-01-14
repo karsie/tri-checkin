@@ -8,11 +8,15 @@ import com.tricode.checkin.service.LogService;
 import com.tricode.checkin.service.ReportingService;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StatusChangeLogCreateListener implements EventListener<StatusChangeLog> {
+
+    private static final Logger log = LoggerFactory.getLogger(StatusChangeLogCreateListener.class);
 
     private ReportingService reportingService;
     private LogService logService;
@@ -26,6 +30,8 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
     @Override
     public void onEvent(StatusChangeLog objectBefore, StatusChangeLog objectAfter, EventType eventType) {
         if (objectAfter.getStatusTo() == LocationStatus.OUT) {
+            log.debug("checkout received for [{}], updating week report", objectAfter.getUserId());
+
             final DateTime signOutTime = new DateTime(objectAfter.getTimestamp());
             int dayIndex = signOutTime.getDayOfWeek() - 1; // MONDAY = 1, so index = 0
             if (dayIndex == 6) { // SUNDAY

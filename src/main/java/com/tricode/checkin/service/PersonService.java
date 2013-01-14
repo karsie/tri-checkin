@@ -8,7 +8,7 @@ public interface PersonService {
 
     Collection<Person> list();
 
-    Person get(Integer id);
+    Person get(int id);
 
     Person save(Person person);
 
