@@ -45,14 +45,35 @@ public class DefaultEventManager implements EventManager {
         doRaiseEvent(new EventListenerRunner<T>(eventObject, null, EventType.DELETE));
     }
 
-    @SuppressWarnings("unchecked")
+
     private <T> void doRaiseEvent(EventListenerRunner<T> runner) {
         if (eventListeners != null) {
+            executor.execute(new EventListenersStarter<T>(eventListeners, executor, runner));
+        }
+    }
+
+    private static class EventListenersStarter<T> implements Runnable {
+
+        private final Collection<EventListener> listeners;
+        private final ExecutorService executorService;
+        private final EventListenerRunner<T> runner;
+
+        private EventListenersStarter(final Collection<EventListener> listeners, final ExecutorService executorService,
+                                      final EventListenerRunner<T> runner) {
+            this.listeners = listeners;
+            this.executorService = executorService;
+            this.runner = runner;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void run() {
             final EventType[] types = {EventType.ALL, runner.runnerType()};
-            for (EventListener eventListener : eventListeners) {
+
+            for (EventListener eventListener : listeners) {
                 if (eventListener.listenerClass().equals(runner.runnerClass())) {
                     if (ArrayUtils.contains(types, eventListener.listenerType())) {
-                        executor.execute(runner.getEventRunner(eventListener));
+                        executorService.execute(runner.getEventRunner(eventListener));
                     }
                 }
             }
@@ -60,6 +81,7 @@ public class DefaultEventManager implements EventManager {
     }
 
     private static class EventListenerRunner<T> {
+
         private final T objectBefore;
         private final T objectAfter;
         private final EventType eventType;
