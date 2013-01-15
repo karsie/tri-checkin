@@ -7,8 +7,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-/**
- */
 @Configuration
 @PropertySource("classpath:/checkin.properties")
 @EnableScheduling

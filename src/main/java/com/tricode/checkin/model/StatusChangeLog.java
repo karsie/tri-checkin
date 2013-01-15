@@ -7,13 +7,6 @@ public class StatusChangeLog {
     private LocationStatus statusTo;
     private long timestamp;
 
-    public StatusChangeLog(int userId, LocationStatus statusFrom, LocationStatus statusTo, long timestamp) {
-        this.userId = userId;
-        this.statusFrom = statusFrom;
-        this.statusTo = statusTo;
-        this.timestamp = timestamp;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -58,5 +51,51 @@ public class StatusChangeLog {
                 ", statusTo=" + statusTo +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public static class Builder {
+
+        private int id;
+        private long timestamp;
+        private LocationStatus statusFrom;
+        private LocationStatus statusTo;
+
+        private Builder(int id) {
+            this.id = id;
+        }
+
+        public static Builder withId(int id) {
+            return new Builder(id);
+        }
+
+        public Builder withTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder withStatusFrom(LocationStatus status) {
+            this.statusFrom = status;
+            return this;
+        }
+
+        public Builder withStatusTo(LocationStatus status) {
+            this.statusTo = status;
+            return this;
+        }
+
+        public Builder withStatuses(LocationStatus from, LocationStatus to) {
+            this.statusFrom = from;
+            this.statusTo = to;
+            return this;
+        }
+
+        public StatusChangeLog createInstance() {
+            final StatusChangeLog statusChangeLog = new StatusChangeLog();
+            statusChangeLog.setUserId(id);
+            statusChangeLog.setStatusFrom(statusFrom);
+            statusChangeLog.setStatusTo(statusTo);
+            statusChangeLog.setTimestamp(timestamp);
+            return statusChangeLog;
+        }
     }
 }

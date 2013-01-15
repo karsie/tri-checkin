@@ -31,10 +31,9 @@ public class PersonUpdateListener implements EventListener<Person> {
         if (personBefore.getStatus() != personAfter.getStatus()) {
             log.debug("person status change received [{}] from {} to {}", personBefore.getId(), personBefore.getStatus(), personAfter.getStatus());
 
-            final StatusChangeLog statusChangeLog = new StatusChangeLog(personBefore.getId(),
-                    personBefore.getStatus(),
-                    personAfter.getStatus(),
-                    new DateTime().getMillis());
+            final StatusChangeLog statusChangeLog = StatusChangeLog.Builder.withId(personBefore.getId())
+                    .withStatusFrom(personBefore.getStatus()).withStatusTo(personAfter.getStatus())
+                    .withTimestamp(new DateTime().getMillis()).createInstance();
 
             logService.addStatusChange(statusChangeLog);
         }
