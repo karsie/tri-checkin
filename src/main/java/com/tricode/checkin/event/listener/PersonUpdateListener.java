@@ -1,14 +1,10 @@
 package com.tricode.checkin.event.listener;
 
 import com.tricode.checkin.event.EventType;
-import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.model.StatusChangeLog;
-import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.service.LogService;
-import com.tricode.checkin.service.ReportingService;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +27,9 @@ public class PersonUpdateListener implements EventListener<Person> {
         if (personBefore.getStatus() != personAfter.getStatus()) {
             log.debug("person status change received [{}] from {} to {}", personBefore.getId(), personBefore.getStatus(), personAfter.getStatus());
 
-            final StatusChangeLog statusChangeLog = StatusChangeLog.Builder.withId(personBefore.getId())
+            final StatusChangeLog statusChangeLog = StatusChangeLog.Builder.withUserId(personBefore.getId())
                     .withStatusFrom(personBefore.getStatus()).withStatusTo(personAfter.getStatus())
-                    .withTimestamp(new DateTime().getMillis()).createInstance();
+                    .withTimestamp(new DateTime().getMillis()).get();
 
             logService.addStatusChange(statusChangeLog);
         }

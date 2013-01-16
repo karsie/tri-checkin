@@ -1,4 +1,4 @@
-package com.tricode.checkin.service.impl;
+package com.tricode.checkin.service.memory;
 
 import com.tricode.checkin.event.manager.EventManager;
 import com.tricode.checkin.model.WeekReport;
@@ -14,32 +14,38 @@ public class InMemoryReportingService implements ReportingService {
 
     private final Map<String, WeekReport> data = new HashMap<String, WeekReport>();
 
-    private final ReportingIdFactory reportingIdFactory;
     private final EventManager eventManager;
 
     @Autowired
-    public InMemoryReportingService(ReportingIdFactory reportingIdFactory, EventManager eventManager) {
-        this.reportingIdFactory = reportingIdFactory;
+    public InMemoryReportingService(EventManager eventManager) {
         this.eventManager = eventManager;
     }
 
     @Override
     public WeekReport get(int userId, int year, int week) {
-        WeekReport weekReport = data.get(reportingIdFactory.get(userId, year, week));
+        WeekReport weekReport = data.get(toId(userId, year, week));
         if (weekReport == null) {
-            weekReport = new WeekReport(userId, year, week);
+            weekReport = WeekReport.Builder.withUserId(userId).withYear(year).withWeek(week).get();
         }
         return weekReport;
     }
 
     @Override
     public WeekReport save(WeekReport weekReport) {
-        final WeekReport oldValue = data.put(reportingIdFactory.get(weekReport.getUserId(), weekReport.getYear(), weekReport.getWeek()), weekReport);
+        final WeekReport oldValue = data.put(toId(weekReport), weekReport);
         if (oldValue == null) {
             eventManager.raiseCreateEvent(weekReport);
         } else {
             eventManager.raiseUpdateEvent(oldValue, weekReport);
         }
         return weekReport;
+    }
+
+    private static String toId(int userId, int year, int week) {
+        return userId + "-" + year + "-" + week;
+    }
+
+    private static String toId(WeekReport weekReport) {
+        return toId(weekReport.getUserId(), weekReport.getYear(), weekReport.getWeek());
     }
 }

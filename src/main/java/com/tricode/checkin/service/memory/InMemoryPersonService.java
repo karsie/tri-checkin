@@ -1,10 +1,9 @@
-package com.tricode.checkin.service.impl;
+package com.tricode.checkin.service.memory;
 
 import com.tricode.checkin.event.manager.EventManager;
-import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
-import org.joda.time.DateTime;
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +39,13 @@ public class InMemoryPersonService implements PersonService {
     }
 
     @Override
+    public Person getByExternalId(String externalId) {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public Person save(Person person) {
         notNull(person);
-
-        if (person.getStatus() == LocationStatus.IN && person.getSignInTime() == 0) {
-            person.setSignInTime(new DateTime().getMillis());
-        }
 
         if (person.getId() == null) {
             synchronized (newPersonLock) {

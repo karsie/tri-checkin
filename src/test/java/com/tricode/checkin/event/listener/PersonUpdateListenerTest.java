@@ -34,11 +34,9 @@ public class PersonUpdateListenerTest {
 
     @Test
     public void whenStatusChangesThenLogIsCreated() throws Exception {
-        final Person a = new Person(1, "test", "test");
-        a.setStatus(LocationStatus.IN);
-
-        final Person b = new Person(1, "test", "test");
-        b.setStatus(LocationStatus.OUT);
+        final int userId = 1;
+        final Person a = Person.Builder.withId(userId).withStatus(LocationStatus.IN).get();
+        final Person b = Person.Builder.withId(userId).withStatus(LocationStatus.OUT).get();
 
         listener.onEvent(a, b, EventType.UPDATE);
 
@@ -46,18 +44,16 @@ public class PersonUpdateListenerTest {
         verify(logService).addStatusChange(capture.capture());
 
         final StatusChangeLog argument = capture.getValue();
-        assertThat(1, is(equalTo(argument.getUserId())));
-        assertThat(LocationStatus.IN, is(equalTo(argument.getStatusFrom())));
-        assertThat(LocationStatus.OUT, is(equalTo(argument.getStatusTo())));
+        assertThat(argument.getUserId(), is(equalTo(userId)));
+        assertThat(argument.getStatusFrom(), is(equalTo(LocationStatus.IN)));
+        assertThat(argument.getStatusTo(), is(equalTo(LocationStatus.OUT)));
     }
 
     @Test
     public void whenStatusDoesNotChangeThenNoLogIsCreated() throws Exception {
-        final Person a = new Person(1, "test", "test");
-        a.setStatus(LocationStatus.OUT);
-
-        final Person b = new Person(1, "test", "test");
-        b.setStatus(LocationStatus.OUT);
+        final int userId = 1;
+        final Person a = Person.Builder.withId(userId).withStatus(LocationStatus.OUT).get();
+        final Person b = Person.Builder.withId(userId).withStatus(LocationStatus.OUT).get();
 
         listener.onEvent(a, b, EventType.UPDATE);
 

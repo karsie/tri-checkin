@@ -1,4 +1,4 @@
-package com.tricode.checkin.service.impl;
+package com.tricode.checkin.service.memory;
 
 import com.tricode.checkin.event.manager.EventManager;
 import com.tricode.checkin.model.LocationStatus;
@@ -25,7 +25,7 @@ public class InMemoryLogService implements LogService {
 
     @Override
     public void addStatusChange(StatusChangeLog log) {
-        data.put(log.toId(), log);
+        data.put(toId(log), log);
         eventManager.raiseCreateEvent(log);
     }
 
@@ -63,5 +63,13 @@ public class InMemoryLogService implements LogService {
         }
 
         return result;
+    }
+
+    private static String toId(int userId, long timestamp) {
+        return userId + "-" + timestamp;
+    }
+
+    private static String toId(StatusChangeLog log) {
+        return toId(log.getUserId(), log.getTimestamp());
     }
 }

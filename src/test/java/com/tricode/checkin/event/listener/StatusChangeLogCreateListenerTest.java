@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.isA;
@@ -41,9 +40,7 @@ public class StatusChangeLogCreateListenerTest {
 
     @Test
     public void whenCheckinLogCreatedNoReportIsUpdated() throws Exception {
-        final StatusChangeLog checkinLog = StatusChangeLog.Builder.withId(1).withStatuses(LocationStatus.OUT,
-                                                                                          LocationStatus.IN)
-                .createInstance();
+        final StatusChangeLog checkinLog = StatusChangeLog.Builder.withUserId(1).withStatuses(LocationStatus.OUT, LocationStatus.IN).get();
 
         listener.onEvent(null, checkinLog, EventType.CREATE);
 
@@ -58,17 +55,17 @@ public class StatusChangeLogCreateListenerTest {
         checkoutTime = checkoutTime.withDayOfWeek(7);
         DateTime checkinTime = checkoutTime.minusHours(8);
 
-        final StatusChangeLog checkoutLog = StatusChangeLog.Builder.withId(userId).withStatuses(LocationStatus.IN,
+        final StatusChangeLog checkoutLog = StatusChangeLog.Builder.withUserId(userId).withStatuses(LocationStatus.IN,
                                                                                            LocationStatus.OUT)
                 .withTimestamp(checkoutTime.getMillis())
-                .createInstance();
+                .get();
 
-        final StatusChangeLog checkinLog = StatusChangeLog.Builder.withId(userId).withStatuses(LocationStatus.OUT,
+        final StatusChangeLog checkinLog = StatusChangeLog.Builder.withUserId(userId).withStatuses(LocationStatus.OUT,
                                                                                           LocationStatus.IN)
                 .withTimestamp(checkinTime.getMillis())
-                .createInstance();
+                .get();
 
-        final WeekReport weekReport = new WeekReport(userId, checkoutTime.getWeekyear(), checkoutTime.getWeekOfWeekyear());
+        final WeekReport weekReport = WeekReport.Builder.withUserId(userId).withYear(checkoutTime.getWeekyear()).withWeek(checkoutTime.getWeekOfWeekyear()).get();
 
         when(logService.getLastStatusChangeForUser(userId, LocationStatus.IN)).thenReturn(checkinLog);
         when(reportingService.get(userId, checkoutTime.getWeekyear(), checkoutTime.getWeekOfWeekyear())).thenReturn(weekReport);

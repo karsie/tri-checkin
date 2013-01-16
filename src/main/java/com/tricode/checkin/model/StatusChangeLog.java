@@ -1,11 +1,34 @@
 package com.tricode.checkin.model;
 
-public class StatusChangeLog {
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+public class StatusChangeLog implements Serializable {
+
+    private static final long serialVersionUID = -5781552727094648406L;
+
+    @Id
+    @GeneratedValue
+    private Integer id;
 
     private int userId;
+
+    @Enumerated(EnumType.STRING)
     private LocationStatus statusFrom;
+
+    @Enumerated(EnumType.STRING)
     private LocationStatus statusTo;
+
     private long timestamp;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public int getUserId() {
         return userId;
@@ -39,10 +62,6 @@ public class StatusChangeLog {
         this.timestamp = timestamp;
     }
 
-    public String toId() {
-        return "" + userId + "-" + timestamp;
-    }
-
     @Override
     public String toString() {
         return "StatusChangeLog{" +
@@ -55,47 +74,53 @@ public class StatusChangeLog {
 
     public static class Builder {
 
-        private int id;
-        private long timestamp;
-        private LocationStatus statusFrom;
-        private LocationStatus statusTo;
+        private final StatusChangeLog log;
 
-        private Builder(int id) {
-            this.id = id;
+        private Builder(Integer id) {
+            log = new StatusChangeLog();
+            log.setId(id);
+        }
+
+        private Builder(Integer id, int userId) {
+            this(id);
+            log.setUserId(userId);
         }
 
         public static Builder withId(int id) {
             return new Builder(id);
         }
 
+        public static Builder empty() {
+            return new Builder(null);
+        }
+
+        public static Builder withUserId(int id) {
+            return new Builder(null, id);
+        }
+
         public Builder withTimestamp(long timestamp) {
-            this.timestamp = timestamp;
+            log.setTimestamp(timestamp);
             return this;
         }
 
         public Builder withStatusFrom(LocationStatus status) {
-            this.statusFrom = status;
+            log.setStatusFrom(status);
             return this;
         }
 
         public Builder withStatusTo(LocationStatus status) {
-            this.statusTo = status;
+            log.setStatusTo(status);
             return this;
         }
 
         public Builder withStatuses(LocationStatus from, LocationStatus to) {
-            this.statusFrom = from;
-            this.statusTo = to;
+            log.setStatusFrom(from);
+            log.setStatusTo(to);
             return this;
         }
 
-        public StatusChangeLog createInstance() {
-            final StatusChangeLog statusChangeLog = new StatusChangeLog();
-            statusChangeLog.setUserId(id);
-            statusChangeLog.setStatusFrom(statusFrom);
-            statusChangeLog.setStatusTo(statusTo);
-            statusChangeLog.setTimestamp(timestamp);
-            return statusChangeLog;
+        public StatusChangeLog get() {
+            return log;
         }
     }
 }

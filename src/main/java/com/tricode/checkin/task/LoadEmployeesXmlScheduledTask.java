@@ -1,6 +1,6 @@
 package com.tricode.checkin.task;
 
-import com.tricode.checkin.CheckinConfig;
+import com.tricode.checkin.config.CheckinConfig;
 import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
@@ -89,33 +89,25 @@ public class LoadEmployeesXmlScheduledTask {
         int newPersons = 0;
         int updatedPersons = 0;
         for (XmlEmployee employee : employees.getEmployees()) {
-            if (StringUtils.isNumeric(employee.getId())) {
-                int id = Integer.valueOf(employee.getId());
-
-                Person person = personService.get(id);
-                if (person == null) {
-                    person = new Person();
-                    person.setId(id);
-                    person.setStatus(LocationStatus.OUT);
-                    newPersons++;
-                } else {
-                    updatedPersons++;
-                }
-                person.setName(employee.getName());
-
-                String[] name = StringUtils.split(employee.getName(), ' ');
-                if (name.length > 0) {
-                    person.setFirst(name[0]);
-
-                    if (name.length > 1) {
-                        person.setLast(parseLastName(name));
-                    }
-                }
-                log.debug("imported person [{}] - [{}]", id, employee.getName());
-                personService.save(person);
+            Person person = personService.getByExternalId(employee.getId());
+            if (person == null) {
+                person = Person.Builder.empty().withExternalId(employee.getId()).withStatus(LocationStatus.OUT).get();
+                newPersons++;
             } else {
-                log.warn("employee [{}] - [{}] doesn't have a numeric id.", employee.getId(), employee.getName());
+                updatedPersons++;
             }
+            person.setName(employee.getName());
+
+            String[] name = StringUtils.split(employee.getName(), ' ');
+            if (name.length > 0) {
+                person.setFirst(name[0]);
+
+                if (name.length > 1) {
+                    person.setLast(parseLastName(name));
+                }
+            }
+            Person saved = personService.save(person);
+            log.debug("imported person [{}] - [{}]", saved.getId(), employee.getName());
         }
         log.info("imported {} new person(s), {} updated", newPersons, updatedPersons);
     }

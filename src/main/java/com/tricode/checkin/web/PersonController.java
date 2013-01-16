@@ -1,4 +1,4 @@
-package com.tricode.checkin.web.controller;
+package com.tricode.checkin.web;
 
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;

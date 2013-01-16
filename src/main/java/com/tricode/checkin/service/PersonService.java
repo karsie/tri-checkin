@@ -10,6 +10,8 @@ public interface PersonService {
 
     Person get(int id);
 
+    Person getByExternalId(String externalId);
+
     Person save(Person person);
 
 }

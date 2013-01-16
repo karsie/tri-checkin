@@ -19,7 +19,17 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <!-- load all beans -->
-    <context:component-scan base-package="com.tricode.checkin"/>
+    <context:component-scan base-package="com.tricode.checkin.config"/>
+    <context:component-scan base-package="com.tricode.checkin.event.manager"/>
+
+    <!--<import resource="checkin-persistence.xml"/>-->
+    <!--<context:component-scan base-package="com.tricode.checkin.persistence"/>-->
+    <!--<context:component-scan base-package="com.tricode.checkin.service.persistent"/>-->
+
+    <context:component-scan base-package="com.tricode.checkin.service.memory"/>
+
+    <context:component-scan base-package="com.tricode.checkin.event.listener"/>
+    <context:component-scan base-package="com.tricode.checkin.web"/>
+    <context:component-scan base-package="com.tricode.checkin.task"/>
 
 </beans>

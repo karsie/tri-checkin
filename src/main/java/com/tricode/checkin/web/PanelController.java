@@ -1,4 +1,4 @@
-package com.tricode.checkin.web.controller;
+package com.tricode.checkin.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
