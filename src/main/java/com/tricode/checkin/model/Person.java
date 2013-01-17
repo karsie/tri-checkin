@@ -1,12 +1,17 @@
 package com.tricode.checkin.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Person implements Serializable {
+public class Person implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -43910303192875882L;
+
+    private static final Logger log = LoggerFactory.getLogger(Person.class);
 
     @Id
     @GeneratedValue
@@ -22,6 +27,8 @@ public class Person implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private LocationStatus status;
+
+    private boolean eatingIn;
 
     public Integer getId() {
         return id;
@@ -71,6 +78,14 @@ public class Person implements Serializable {
         this.status = status;
     }
 
+    public boolean isEatingIn() {
+        return eatingIn;
+    }
+
+    public void setEatingIn(boolean eatingIn) {
+        this.eatingIn = eatingIn;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -80,7 +95,17 @@ public class Person implements Serializable {
                 ", first='" + first + '\'' +
                 ", last='" + last + '\'' +
                 ", status=" + status +
+                ", eatingIn=" + eatingIn +
                 '}';
+    }
+
+    public Person clone() {
+        try {
+            return (Person) super.clone();
+        } catch (CloneNotSupportedException e) {
+            log.error("unable to clone person", e);
+            return null;
+        }
     }
 
     public static class Builder {

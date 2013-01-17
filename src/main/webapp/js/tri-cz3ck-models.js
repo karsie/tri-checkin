@@ -11,7 +11,16 @@ var Employees = Backbone.Collection.extend({
 	
 	comparator: function(model) {
 		return model.get(this.sortAttribute);
-	}
+	},
+
+    sortByAttribute: function(attribute) {
+        this.sortAttribute = attribute;
+        this.sort();
+    },
+
+    getSortAttribute: function() {
+        return this.sortAttribute;
+    }
 });
 
 var EmployeesByStatus = Backbone.Subset.extend({

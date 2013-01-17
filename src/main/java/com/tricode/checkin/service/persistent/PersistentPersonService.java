@@ -43,7 +43,7 @@ public class PersistentPersonService implements PersonService {
     public Person save(Person person) {
         final Person oldValue;
         if (person.getId() != null) {
-            oldValue = personRepository.get(person.getId());
+            oldValue = personRepository.get(person.getId()).clone();
         } else {
             oldValue = null;
         }

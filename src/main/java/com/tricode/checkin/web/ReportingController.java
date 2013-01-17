@@ -33,9 +33,7 @@ public class ReportingController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    Collection<WeekReport> getReportData() {
+    public @ResponseBody Collection<WeekReport> getReportData() {
         final DateTime currentDate = new DateTime();
         final Collection<Person> persons = personService.list();
 

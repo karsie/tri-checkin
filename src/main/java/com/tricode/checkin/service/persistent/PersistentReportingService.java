@@ -25,7 +25,11 @@ public class PersistentReportingService implements ReportingService {
 
     @Override
     public WeekReport get(int userId, int year, int week) {
-        throw new NotImplementedException();
+        WeekReport weekReport = weekReportRepository.getByUserIdYearAndWeek(userId, year, week);
+        if (weekReport == null) {
+            weekReport = WeekReport.Builder.withUserId(userId).withYear(year).withWeek(week).get();
+        }
+        return weekReport;
     }
 
     @Override

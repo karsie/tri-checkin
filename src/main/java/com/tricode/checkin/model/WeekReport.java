@@ -25,7 +25,7 @@ public class WeekReport implements Serializable {
     @NaturalId
     private int week;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
     private List<Long> days;
 

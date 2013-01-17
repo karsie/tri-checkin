@@ -6,27 +6,32 @@ var ReportListView = Backbone.View.extend({
     },
 
     render: function() {
+        this.$el.html('');
         this.collection.forEach(this.renderOne, this);
     },
 
     renderOne: function(model, index){
-        var itemView = new ReportItemView({ model: model, employee: this.options.employees.get(model.get('userId')) });
+        var report = this.options.reportDetails.find(function(reportDetail) {return reportDetail.get('userId') == model.get('id');});
+        var itemView = new ReportItemView({ model: model, report: report });
         itemView.render(this.$el);
     }
 });
 
 var ReportItemView = Backbone.View.extend({
-    template: _.template('<div id="emp<%= userId %>"><span class="name"><%= userName %></span><canvas id="emp<%= userId %>Canvas" class="right" width="458" height="70"></canvas><div class="clear"></div></div>'),
+    template: _.template('<div id="emp<%= id %>" class="report_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70"></canvas><div class="clear"></div></div>'),
 
     render: function(parent) {
-        var templateModel = this.model.toJSON();
-        templateModel['userName'] = this.options.employee.get('name');
-        parent.append(this.template(templateModel));
+        var $el = $('#emp' + this.model.get('id'));
+        if ($el.length == 0) {
+            parent.append(this.template(this.model.toJSON()));
+            $el = $('#emp' + this.model.get('id'));
+        }
 
-        this.setElement($('#emp' + this.model.get('userId')));
-        var $canvas = $('#emp' + this.model.get('userId') + 'Canvas');
+        this.setElement($el);
+//        if (typeof this.options.report == 'undefined') return;
 
-        var days = this.model.get('days');
+        var $canvas = $('#emp' + this.model.get('id') + 'Canvas');
+        var days = this.options.report.get('days');
 
         var max = 8 * 60 * 60 * 1000;
         var pts = [];
@@ -49,7 +54,8 @@ var ReportItemView = Backbone.View.extend({
             pts[p][3] = percentOfMax;
         }
 
-        var padding = 9;
+        var paddingTop = 9;
+        var paddingLeft = 15;
 
         var line = {
             layer: true,
@@ -59,8 +65,8 @@ var ReportItemView = Backbone.View.extend({
         };
         for (p = 0; p < pts.length; p++) {
             var pid = (p + 1);
-            line['x' + pid] = padding + pts[p][0];
-            line['y' + pid] = padding + pts[p][1];
+            line['x' + pid] = paddingLeft + pts[p][0];
+            line['y' + pid] = paddingTop + pts[p][1];
         }
         $canvas.drawLine(line);
 
@@ -96,18 +102,18 @@ var ReportItemView = Backbone.View.extend({
                 fillStyle: '#fff',
                 strokeStyle: '#333',
                 strokeWidth: 2,
-                x: padding + pts[p][0], y: padding + pts[p][1],
+                x: paddingLeft + pts[p][0], y: paddingTop + pts[p][1],
                 radius: 7,
                 start: 0.1, end: 360
             });
             $canvas.drawArc({
                 layer: true,
                 name: 'p' + pid,
-                fillStyle: '#36b',
-                strokeStyle: '#333',
+                fillStyle: '#f00',
+                strokeStyle: '#f00',
                 strokeWidth: 2,
                 pid: pid,
-                x: padding + pts[p][0], y: padding + pts[p][1],
+                x: paddingLeft + pts[p][0], y: paddingTop + pts[p][1],
                 start: 0.1, end: 360,
                 tooltip: pts[p][2],
                 radius: 4,
@@ -116,11 +122,11 @@ var ReportItemView = Backbone.View.extend({
 
                     var $tt = $canvas.getLayer('tooltip');
                     var ttX = layer.eventX - 25;
-                    if (ttX < padding) {
-                        ttX = padding;
+                    if (ttX < paddingLeft) {
+                        ttX = paddingLeft;
                     }
                     var ttY = layer.eventY - $tt.height - 15;
-                    if (ttY < padding) { // move it below
+                    if (ttY < paddingTop) { // move it below
                         ttY = layer.eventY + 20;
                     }
 

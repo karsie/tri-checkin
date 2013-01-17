@@ -81,6 +81,7 @@ var EmployeeListView = Backbone.View.extend({
 	},
 	
 	renderPages: function() {
+        var pageView;
 		var numPages = Math.ceil(this.collection.size() / this.options.pageSize);
 		
 		_.each(this.pageViews, function(pageView) {
@@ -89,7 +90,7 @@ var EmployeeListView = Backbone.View.extend({
 		
 		if (numPages < this.pageViews.length) { // we lost a page
 			while (numPages < this.pageViews.length) {
-				var pageView = this.pageViews.pop();
+				pageView = this.pageViews.pop();
 				pageView.destroy();
 			}
 		} else {
@@ -100,12 +101,12 @@ var EmployeeListView = Backbone.View.extend({
 				if (end >= this.collection.size()) end = this.collection.size() - 1;
 				
 				if (pageNum < this.pageViews.length) {
-					var pageView = this.pageViews[pageNum];
+					pageView = this.pageViews[pageNum];
 					pageView.render(this, start, end);
 				} else {
 					var pageId = this.id + 'Page' + pageNum;
 					
-					var pageView = new EmployeePageView({ id: pageId, collection: this.collection });
+					pageView = new EmployeePageView({ id: pageId, collection: this.collection });
 					this.pageViews.push(pageView);
 					pageView.render(this, start, end);
 				}
@@ -167,12 +168,26 @@ var EmployeePageView = Backbone.View.extend({
 });
 
 var EmployeeView = Backbone.View.extend({
-	template: _.template('<li id="emp<%= id %>" class="ui-widget-content ui-corner-all employee"><span id="emp<%= id %>Name" class="name"><%= name %></span><button id="emp<%= id %>Btn1">1</button><button id="emp<%= id %>Btn2">2</button></li>'),
+	template: _.template('<li id="emp<%= id %>" class="ui-widget-content ui-corner-all employee">' +
+        '<span id="emp<%= id %>Name" class="name"><%= name %></span>' +
+//        '<input type="checkbox" id="emp<%= id %>Btn1" /><label for="emp<%= id %>Btn1">Ik eet mee</label>' +
+        '<button id="emp<%= id %>Btn1">Ik eet mee</button>' +
+        '</li>'),
 	
 	render: function() {
 		this.$el.html(this.template(this.model.toJSON()));
-		this.$('#emp' + this.model.get('id') + 'Btn1').button();
-		this.$('#emp' + this.model.get('id') + 'Btn2').button().addClass('clear');
+        var buttonModel = this.model;
+        this.$('#emp' + this.model.get('id') + 'Btn1').button({icons: {primary: "ui-icon-check"}, text: false}).click(function( event ) {
+            if (buttonModel.get('eatingIn')) {
+                buttonModel.set('eatingIn', false);
+                buttonModel.save();
+                $(event.currentTarget).removeClass('ui-state-active');
+            } else {
+                buttonModel.set('eatingIn', true);
+                buttonModel.save();
+                $(event.currentTarget).addClass('ui-state-active');
+            }
+        });
 		return this;
 	}
 });
@@ -201,8 +216,8 @@ var EmployeeButtonView = Backbone.View.extend({
 			var view = this;
 			$sortEl.buttonset({ create: function() {
 				view.$('#' + sortId + ' input:radio[value=' + collection.getSortAttribute() + ']').attr('checked', true);
-			} }).change(function (evt) {
-				collection.sortByAttribute(evt.srcElement.value);
+			} }).change(function (event) {
+				collection.sortByAttribute(event.srcElement.value);
 			});
 		}
 		

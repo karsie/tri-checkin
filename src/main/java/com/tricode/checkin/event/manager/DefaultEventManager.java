@@ -45,7 +45,6 @@ public class DefaultEventManager implements EventManager {
         doRaiseEvent(new EventListenerRunner<T>(eventObject, null, EventType.DELETE));
     }
 
-
     private <T> void doRaiseEvent(EventListenerRunner<T> runner) {
         if (eventListeners != null) {
             executor.execute(new EventListenersStarter<T>(eventListeners, executor, runner));
