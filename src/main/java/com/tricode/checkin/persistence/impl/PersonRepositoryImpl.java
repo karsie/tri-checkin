@@ -20,7 +20,8 @@ public class PersonRepositoryImpl extends AbstractRepository<Person> implements 
 
     @Override
     public Person getByExternalId(final String externalId) {
-        final CriteriaQuery<Person> query = queryBuilderFactory.newBuilder(Person.class).equal(Person_.externalId, externalId).toQuery();
+        final CriteriaQuery<Person> query = queryBuilderFactory.newBuilder(Person.class).where(Person_.externalId,
+                                                                                               externalId).toQuery();
         try {
             return entityManager.createQuery(query).getSingleResult();
         } catch (NoResultException e) {
