@@ -1,6 +1,8 @@
 package com.tricode.checkin.event.listener;
 
 import com.tricode.checkin.event.EventType;
+import com.tricode.checkin.model.EatingInLog;
+import com.tricode.checkin.model.Log;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.model.StatusChangeLog;
 import com.tricode.checkin.service.LogService;
@@ -24,15 +26,31 @@ public class PersonUpdateListener implements EventListener<Person> {
 
     @Override
     public void onEvent(Person personBefore, Person personAfter, EventType eventType) {
-        if (personBefore.getStatus() != personAfter.getStatus()) {
+        if (hasStateChanged(personBefore, personAfter)) {
             log.debug("person status change received [{}] from {} to {}", personBefore.getId(), personBefore.getStatus(), personAfter.getStatus());
 
-            final StatusChangeLog statusChangeLog = StatusChangeLog.Builder.withUserId(personBefore.getId())
+            final Log statusChangeLog = StatusChangeLog.Builder.withUserId(personBefore.getId())
                     .withStatusFrom(personBefore.getStatus()).withStatusTo(personAfter.getStatus())
                     .withTimestamp(new DateTime().getMillis()).get();
 
-            logService.addStatusChange(statusChangeLog);
+            logService.addLog(statusChangeLog);
+        } else if (hasEatingInChanged(personBefore, personAfter)) {
+            log.debug("person eating in received [{}] from {} to {}", personBefore.getId(), personBefore.isEatingIn(), personAfter.isEatingIn());
+
+            final Log eatingInLog = EatingInLog.Builder.withUserId(personBefore.getId())
+                    .withEatingIn(personAfter.isEatingIn())
+                    .withTimestamp(new DateTime().getMillis()).get();
+
+            logService.addLog(eatingInLog);
         }
+    }
+
+    private static boolean hasStateChanged(Person personBefore, Person personAfter) {
+        return personBefore.getStatus() != personAfter.getStatus();
+    }
+
+    private static boolean hasEatingInChanged(Person personBefore, Person personAfter) {
+        return personBefore.isEatingIn() != personAfter.isEatingIn();
     }
 
     @Override

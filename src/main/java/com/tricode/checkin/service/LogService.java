@@ -1,13 +1,14 @@
 package com.tricode.checkin.service;
 
 import com.tricode.checkin.model.LocationStatus;
+import com.tricode.checkin.model.Log;
 import com.tricode.checkin.model.StatusChangeLog;
 
 import java.util.Collection;
 
 public interface LogService {
 
-    void addStatusChange(StatusChangeLog log);
+    void addLog(Log log);
 
     Collection<StatusChangeLog> listStatusChangesForUser(int userId);
 

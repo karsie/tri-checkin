@@ -1,5 +1,7 @@
 package com.tricode.checkin.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -25,9 +27,15 @@ public class WeekReport implements Serializable {
     @NaturalId
     private int week;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
     private List<Long> days;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
+    @CollectionTable(joinColumns = @JoinColumn(name = "id"))
+    private List<Boolean> eatingIn;
 
     public Integer getId() {
         return id;
@@ -69,6 +77,14 @@ public class WeekReport implements Serializable {
         this.days = days;
     }
 
+    public List<Boolean> getEatingIn() {
+        return eatingIn;
+    }
+
+    public void setEatingIn(List<Boolean> eatingIn) {
+        this.eatingIn = eatingIn;
+    }
+
     public static class Builder {
 
         private final WeekReport weekReport;
@@ -77,6 +93,7 @@ public class WeekReport implements Serializable {
             weekReport = new WeekReport();
             weekReport.setId(id);
             weekReport.setDays(Arrays.asList(0L, 0L, 0L, 0L, 0L));
+            weekReport.setEatingIn(Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         }
 
         private Builder(Integer id, int userId) {

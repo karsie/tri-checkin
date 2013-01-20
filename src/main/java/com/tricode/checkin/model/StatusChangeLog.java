@@ -4,39 +4,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class StatusChangeLog implements Serializable {
+public class StatusChangeLog extends Log implements Serializable {
 
     private static final long serialVersionUID = -5781552727094648406L;
-
-    @Id
-    @GeneratedValue
-    private Integer id;
-
-    private int userId;
 
     @Enumerated(EnumType.STRING)
     private LocationStatus statusFrom;
 
     @Enumerated(EnumType.STRING)
     private LocationStatus statusTo;
-
-    private long timestamp;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public LocationStatus getStatusFrom() {
         return statusFrom;
@@ -54,21 +30,12 @@ public class StatusChangeLog implements Serializable {
         this.statusTo = statusTo;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     @Override
     public String toString() {
         return "StatusChangeLog{" +
-                "userId=" + userId +
-                ", statusFrom=" + statusFrom +
+                super.toString() +
+                "statusFrom=" + statusFrom +
                 ", statusTo=" + statusTo +
-                ", timestamp=" + timestamp +
                 '}';
     }
 

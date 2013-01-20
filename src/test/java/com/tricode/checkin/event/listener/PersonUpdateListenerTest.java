@@ -41,7 +41,7 @@ public class PersonUpdateListenerTest {
         listener.onEvent(a, b, EventType.UPDATE);
 
         final ArgumentCaptor<StatusChangeLog> capture = ArgumentCaptor.forClass(StatusChangeLog.class);
-        verify(logService).addStatusChange(capture.capture());
+        verify(logService).addLog(capture.capture());
 
         final StatusChangeLog argument = capture.getValue();
         assertThat(argument.getUserId(), is(equalTo(userId)));
@@ -57,6 +57,6 @@ public class PersonUpdateListenerTest {
 
         listener.onEvent(a, b, EventType.UPDATE);
 
-        verify(logService, never()).addStatusChange(isA(StatusChangeLog.class));
+        verify(logService, never()).addLog(isA(StatusChangeLog.class));
     }
 }

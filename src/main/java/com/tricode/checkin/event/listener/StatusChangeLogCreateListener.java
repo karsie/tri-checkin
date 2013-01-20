@@ -18,8 +18,8 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
 
     private static final Logger log = LoggerFactory.getLogger(StatusChangeLogCreateListener.class);
 
-    private ReportingService reportingService;
-    private LogService logService;
+    private final ReportingService reportingService;
+    private final LogService logService;
 
     @Autowired
     public StatusChangeLogCreateListener(ReportingService reportingService, LogService logService) {
@@ -29,6 +29,7 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
 
     @Override
     public void onEvent(StatusChangeLog objectBefore, StatusChangeLog objectAfter, EventType eventType) {
+        log.debug("SCL event");
         if (objectAfter.getStatusTo() == LocationStatus.OUT) {
             log.debug("checkout received for [{}], updating week report", objectAfter.getUserId());
 
@@ -41,10 +42,9 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
             }
 
             final StatusChangeLog lastStatus = logService.getLastStatusChangeForUser(objectAfter.getUserId(), LocationStatus.IN);
+            final WeekReport weekReport = reportingService.get(objectAfter.getUserId(), signOutTime.getWeekyear(), signOutTime.getWeekOfWeekyear());
 
             Duration signedInFor = new Duration(lastStatus.getTimestamp(), objectAfter.getTimestamp());
-
-            WeekReport weekReport = reportingService.get(objectAfter.getUserId(), signOutTime.getWeekyear(), signOutTime.getWeekOfWeekyear());
             signedInFor = signedInFor.plus(weekReport.getDays().get(dayIndex));
 
             weekReport.getDays().set(dayIndex, signedInFor.getMillis());
