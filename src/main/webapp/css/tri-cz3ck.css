@@ -8,7 +8,7 @@ body, div { font-family: Calibri, sans-serif !important; }
 .selectable .ui-highlited { background: #FECA40; }
 
 .selectable { list-style-type: none; margin: 0; padding: 0; }
-.selectable li { margin: 1% 0.75%; float: left; width: 48%; height: 80px; cursor: pointer; }
+.selectable li { margin: 0.5% 0.75%; float: left; width: 48%; height: 80px; cursor: pointer; }
 
 .employee span.name { float: left; margin: 10px 0 0 10px; }
 .employee .fff-icon { float: right; margin: 5px 5px 0 0; }
@@ -36,7 +36,7 @@ body, div { font-family: Calibri, sans-serif !important; }
 }
 
 .ui-accordion .ui-accordion-content {
-	padding: 1% 2%;
+	padding: 0.5% 2%;
 }
 /* TODO reduce/fix margins of accordion */
 

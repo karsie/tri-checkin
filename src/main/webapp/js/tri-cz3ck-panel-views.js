@@ -13,8 +13,7 @@ var EmployeeListView = Backbone.View.extend({
 		
         this.collection.bind("reset", this.render, this);
     },
-	
-	
+
 	clear: function(delegate) {
 		if (arguments.length > 0) {
 			this.clearListeners.push(delegate);
@@ -34,6 +33,14 @@ var EmployeeListView = Backbone.View.extend({
 			this.refreshAccordion();
 		}
 	},
+
+    disable: function() {
+        this.$accordion.accordion("disable");
+    },
+
+    enable: function() {
+        this.$accordion.accordion("enable");
+    },
 	
 	suspendRender: function() {
 		this.renderState = false;
@@ -186,10 +193,10 @@ var EmployeeView = Backbone.View.extend({
             }
         }
 
-        if (this.model.get('isBirthday')) {
+        if (this.model.isBirthday()) {
             $emp.append(this.newDisplayButton("fff-icon-cake", "Jarig"));
         }
-        if (this.model.get('isNew')) {
+        if (this.model.isNewEmployee()) {
             $emp.append(this.newDisplayButton("fff-icon-new", "Nieuw"));
         }
 		return this;
@@ -215,19 +222,18 @@ var EmployeeView = Backbone.View.extend({
     },
 
     newEatingButton: function() {
-        var buttonModel = this.model;
         var enabledState = {primary: "tri-icon-eating-in"};
         var disabledState = {primary: "tri-icon-eating-out"};
 
         var $button = $(document.createElement('button')).html('Ik eet mee');
-        $button.button({text: false, icons: (this.model.get('eatingIn') ? enabledState : disabledState)}).click(function (event) {
-                if (buttonModel.get('eatingIn')) {
-                    buttonModel.set('eatingIn', false);
-                    buttonModel.save();
+        $button.button({text: false, icons: (this.model.get('eatingIn') ? enabledState : disabledState)}).click(this.model, function (event) {
+                if (event.data.get('eatingIn')) {
+                    event.data.set('eatingIn', false);
+                    event.data.save();
                     $(event.currentTarget).button("option", "icons", disabledState);
                 } else {
-                    buttonModel.set('eatingIn', true);
-                    buttonModel.save();
+                    event.data.set('eatingIn', true);
+                    event.data.save();
                     $(event.currentTarget).button("option", "icons", enabledState);
                 }
             }).addClass("fff-icon");
@@ -238,8 +244,8 @@ var EmployeeView = Backbone.View.extend({
 var EmployeeButtonView = Backbone.View.extend({
 	sortTemplate: _.template('<div id="<%= id %>" class="left"></div>'),
 	sortOptionTemplate: _.template('<input type="radio" id="<%= id %><%= attribute %>" value="<%= attribute %>" name="<%= id %>"><label for="<%= id %><%= attribute %>"><%= attributeText %></label>'),
-	clearTemplate: _.template('<button id="<%= id %>Clear" class="right"><%= text %></button>'),
-	
+	buttonTemplate: _.template('<button id="<%= id %>" class="right"><%= text %></button>'),
+
 	render: function() {
 		var buttons = this.options.buttons;
 		if (buttons.sort === true && _.isArray(buttons.sortOptions)) {
@@ -260,18 +266,49 @@ var EmployeeButtonView = Backbone.View.extend({
 			$sortEl.buttonset({ create: function() {
 				view.$('#' + sortId + ' input:radio[value=' + collection.getSortAttribute() + ']').attr('checked', true);
 			} }).change(function (event) {
-				collection.sortByAttribute(event.srcElement.value);
+				collection.sortByAttribute(event.target.value);
 			});
 		}
 		
 		if (buttons.clear === true) {
-			this.$el.append(this.clearTemplate({ id: this.id, text: 'All out' }));
+			this.$el.append(this.buttonTemplate({ id: this.id + 'Clear', text: 'All out' }));
 			
-			var sourceView = this.options.sourceView;
-			this.$('#' + this.id + 'Clear').button(buttons.clearOptions).click(function() {
-				sourceView.clear();
+			this.$('#' + this.id + 'Clear').button(buttons.clearOptions).click(this.options.sourceView, function(event) {
+				event.data.clear();
 			}).addClass("fff-icon");
 		}
+        if (buttons.info === true) {
+            var $dialog = $('#' + this.id + 'Dialog');
+            var infoId = this.id + 'Info';
+            if ($dialog.length == 0) {
+                $dialog = $(document.createElement('div')).attr('id', this.id + 'Dialog').attr('title', 'Information');
+                $dialog.dialog({
+                    autoOpen: false,
+                    modal: true,
+                    draggable: false,
+                    resizable: false,
+                    buttons: {
+                        OK: function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            }
+            this.$el.append(this.buttonTemplate({ id: infoId, text: 'Information' }));
+            this.$('#' + infoId).button({text: false, icons: { primary: "fff-icon-information" }}).click(this, function(event) {
+                var count = 0;
+                event.data.collection.forEach(function(employee) {
+                    if (employee.get('eatingIn')) {
+                        count++;
+                    }
+                });
+
+                $dialog.html('Aantal aangemeld voor lunch: ' + count);
+
+                $dialog.dialog('open');
+                return false;
+            }).addClass("fff-icon");
+        }
 		this.$el.append('<div class="clear"></div>');
 		return this;
 	}
@@ -286,8 +323,7 @@ function selectingCallback(selected, sourceView, targetView) {
 		var model = sourceView.collection.get(id);
 		model.set('status', targetView.options.status);
         model.save();
-		
-		
+
 		$('#emp' + model.get('id')).addClass('ui-highlited');
 		var targetPage = (Math.floor(targetView.collection.indexOf(model) / targetView.options.pageSize));
 		targetView.refreshAccordion(targetPage);
