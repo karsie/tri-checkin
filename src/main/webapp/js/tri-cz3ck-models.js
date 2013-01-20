@@ -1,4 +1,13 @@
+// The number of milliseconds in one day
+var ONE_DAY = 1000 * 60 * 60 * 24;
+
 var Employee = Backbone.Model.extend({
+    initialize: function(model) {
+        var today = new Date();
+        this.set('isBirthday', (this.get('birthDate') != null && today.toDateString() == new Date(this.get('birthDate')).toDateString()));
+        this.set('isNew', (this.get('startDate') != null && Math.round(Math.abs(this.get('startDate') - today.getTime()) / ONE_DAY) < 60));
+    },
+
 	getShortNotation: function(attribute) {
 		return this.get(attribute);
 	}

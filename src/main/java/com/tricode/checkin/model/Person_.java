@@ -2,6 +2,7 @@ package com.tricode.checkin.model;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+import java.util.Calendar;
 
 @StaticMetamodel(Person.class)
 public class Person_ {
@@ -19,4 +20,8 @@ public class Person_ {
     public static volatile SingularAttribute<Person, LocationStatus> status;
 
     public static volatile SingularAttribute<Person, Boolean> eatingIn;
+
+    public static volatile SingularAttribute<Person, Calendar> birthDate;
+
+    public static volatile SingularAttribute<Person, Calendar> startDate;
 }

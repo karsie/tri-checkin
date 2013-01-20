@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 
 @Entity
 public class Person implements Serializable, Cloneable {
@@ -29,6 +30,10 @@ public class Person implements Serializable, Cloneable {
     private LocationStatus status;
 
     private boolean eatingIn;
+
+    private Calendar birthDate;
+
+    private Calendar startDate;
 
     public Integer getId() {
         return id;
@@ -84,6 +89,22 @@ public class Person implements Serializable, Cloneable {
 
     public void setEatingIn(boolean eatingIn) {
         this.eatingIn = eatingIn;
+    }
+
+    public Calendar getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Calendar birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Calendar getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Calendar startDate) {
+        this.startDate = startDate;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.tricode.checkin.service.PersonService;
 import com.tricode.checkin.xml.XmlEmployee;
 import com.tricode.checkin.xml.XmlEmployees;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,13 @@ public class LoadEmployeesXmlScheduledTask {
                 updatedPersons++;
             }
             person.setName(employee.getName());
+            if (employee.getBirthDate() != null) {
+                person.setBirthDate(employee.getBirthDate());
+            }
+
+            if (employee.getStartDate() != null) {
+                person.setStartDate(employee.getStartDate());
+            }
 
             final String[] name = StringUtils.split(employee.getName(), ' ');
             if (name.length > 0) {
