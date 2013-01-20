@@ -46,7 +46,7 @@ public class LoadEmployeesXmlScheduledTask {
 
     @Scheduled(cron = "0 3 * * * ?")
     @PostConstruct
-    public void load() {
+    public void runTask() {
         if (unmarshaller != null) {
             try {
                 importXmlEmployeeFiles();
@@ -98,7 +98,7 @@ public class LoadEmployeesXmlScheduledTask {
             }
             person.setName(employee.getName());
 
-            String[] name = StringUtils.split(employee.getName(), ' ');
+            final String[] name = StringUtils.split(employee.getName(), ' ');
             if (name.length > 0) {
                 person.setFirst(name[0]);
 
@@ -106,7 +106,7 @@ public class LoadEmployeesXmlScheduledTask {
                     person.setLast(parseLastName(name));
                 }
             }
-            Person saved = personService.save(person);
+            final Person saved = personService.save(person);
             log.debug("imported person [{}] - [{}]", saved.getId(), employee.getName());
         }
         log.info("imported {} new person(s), {} updated", newPersons, updatedPersons);
@@ -137,7 +137,7 @@ public class LoadEmployeesXmlScheduledTask {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                load();
+                runTask();
             }
         });
     }

@@ -170,26 +170,69 @@ var EmployeePageView = Backbone.View.extend({
 var EmployeeView = Backbone.View.extend({
 	template: _.template('<li id="emp<%= id %>" class="ui-widget-content ui-corner-all employee">' +
         '<span id="emp<%= id %>Name" class="name"><%= name %></span>' +
-//        '<input type="checkbox" id="emp<%= id %>Btn1" /><label for="emp<%= id %>Btn1">Ik eet mee</label>' +
-        '<button id="emp<%= id %>Btn1">Ik eet mee</button>' +
         '</li>'),
-	
+
 	render: function() {
 		this.$el.html(this.template(this.model.toJSON()));
-        var buttonModel = this.model;
-        this.$('#emp' + this.model.get('id') + 'Btn1').button({icons: {primary: "ui-icon-check"}, text: false}).click(function( event ) {
-            if (buttonModel.get('eatingIn')) {
-                buttonModel.set('eatingIn', false);
-                buttonModel.save();
-                $(event.currentTarget).removeClass('ui-state-active');
+        var $emp = this.$('#emp' + this.model.get('id'));
+
+        if (this.model.get('status') == 'IN') {
+            $emp.append(this.newEatingButton());
+        } else {
+            if (this.model.get('eatingIn')) {
+                $emp.append(this.newDisplayButton("tri-icon-eating-in", "Ik eet mee"));
             } else {
-                buttonModel.set('eatingIn', true);
-                buttonModel.save();
-                $(event.currentTarget).addClass('ui-state-active');
+                $emp.append(this.newDisplayButton("tri-icon-eating-out", "Ik eet niet mee"));
             }
-        });
+        }
+
+        if (this.model.get('isBirthday')) {
+            $emp.append(this.newDisplayButton("fff-icon-cake", "Jarig"));
+        }
+        if (this.model.get('isNew')) {
+            $emp.append(this.newDisplayButton("fff-icon-new", "Nieuw"));
+        }
 		return this;
-	}
+	},
+
+    newDisplayButton: function(icon, title) {
+        var $button = $(document.createElement('div'))
+            .addClass("ui-button")
+            .addClass("ui-widget")
+            .addClass("ui-state-active")
+            .addClass("ui-corner-all")
+            .addClass("ui-button-icon-only")
+            .addClass("fff-icon");
+        var $spanIcon = $(document.createElement('span'))
+            .addClass("ui-button-icon-primary")
+            .addClass("ui-icon")
+            .addClass(icon);
+        var $spanText = $(document.createElement('span'))
+            .addClass("ui-button-text")
+            .html(title);
+        $button.append($spanIcon).append($spanText);
+        return $button;
+    },
+
+    newEatingButton: function() {
+        var buttonModel = this.model;
+        var enabledState = {primary: "tri-icon-eating-in"};
+        var disabledState = {primary: "tri-icon-eating-out"};
+
+        var $button = $(document.createElement('button')).html('Ik eet mee');
+        $button.button({text: false, icons: (this.model.get('eatingIn') ? enabledState : disabledState)}).click(function (event) {
+                if (buttonModel.get('eatingIn')) {
+                    buttonModel.set('eatingIn', false);
+                    buttonModel.save();
+                    $(event.currentTarget).button("option", "icons", disabledState);
+                } else {
+                    buttonModel.set('eatingIn', true);
+                    buttonModel.save();
+                    $(event.currentTarget).button("option", "icons", enabledState);
+                }
+            }).addClass("fff-icon");
+        return $button;
+    }
 });
 
 var EmployeeButtonView = Backbone.View.extend({
@@ -227,7 +270,7 @@ var EmployeeButtonView = Backbone.View.extend({
 			var sourceView = this.options.sourceView;
 			this.$('#' + this.id + 'Clear').button(buttons.clearOptions).click(function() {
 				sourceView.clear();
-			});
+			}).addClass("fff-icon");
 		}
 		this.$el.append('<div class="clear"></div>');
 		return this;

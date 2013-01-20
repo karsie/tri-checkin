@@ -20,6 +20,8 @@ requirejs.config({
             deps: ['tri-cz3ck-models${minifySuffix}', 'libs/jquery-ui-min', 'libs/require-css${minifySuffix}'],
             init: function() {
                 requireCss("tri-cz3ck${minifySuffix}");
+                requireCss("libs/themes/fff/css/fff.icon.core");
+                requireCss("libs/themes/fff/css/fff.icon.icons.min");
             }
         }
     }
@@ -35,7 +37,7 @@ define(['tri-cz3ck-panel-views${minifySuffix}'], function () {
             { attribute: 'first', text: 'Voornaam' },
             { attribute: 'last', text: 'Achternaam' }
         ];
-        var leftView = new EmployeeListView({ id: 'ctleft', collection: inside, status: 'IN', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions, clear: true, clearOptions: { label: 'Iedereen uitchecken', text: false, icons: { primary: "ui-icon-arrowthickstop-1-e" } } } });
+        var leftView = new EmployeeListView({ id: 'ctleft', collection: inside, status: 'IN', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions, clear: true, clearOptions: { label: 'Iedereen uitchecken', text: false, icons: { primary: "fff-icon-resultset-last" } } } });
         leftView.clear(function () {
             rightView.suspendRender();
             leftView.suspendRender();

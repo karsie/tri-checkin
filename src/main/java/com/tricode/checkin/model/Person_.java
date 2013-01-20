@@ -17,4 +17,6 @@ public class Person_ {
     public static volatile SingularAttribute<Person, String> last;
 
     public static volatile SingularAttribute<Person, LocationStatus> status;
+
+    public static volatile SingularAttribute<Person, Boolean> eatingIn;
 }

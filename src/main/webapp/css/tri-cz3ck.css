@@ -10,21 +10,35 @@ body, div { font-family: Calibri, sans-serif !important; }
 .selectable { list-style-type: none; margin: 0; padding: 0; }
 .selectable li { margin: 1% 0.75%; float: left; width: 48%; height: 80px; cursor: pointer; }
 
-.employee span.name { float: left; margin: 10px 0px 0px 10px; }
-/*.employee button { float: right; margin: 5px 5px 0px 0px; font-size: 0.5em !important; }*/
-.employee button { float: right; margin: 5px 5px 0px 0px; }
+.employee span.name { float: left; margin: 10px 0 0 10px; }
+.employee .fff-icon { float: right; margin: 5px 5px 0 0; }
 
 .left { float: left; }
 .right { float: right; }
 .clear { clear: both; }
 
-.ui-button-icon-only .ui-icon { zoom: 200%; width:16px; height: 16px; top:0px; left:0px; margin-top:2px; margin-left:2px; }
+.ui-icon.tri-icon-eating-in {
+    background-image:url('images/restaurant.png')!important;
+    background-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+    margin-left: -12px;
+}
+
+.ui-icon.tri-icon-eating-out {
+    background-image:url('images/restaurant_disabled.png')!important;
+    background-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+    margin-left: -12px;
+}
 
 .ui-accordion .ui-accordion-content {
 	padding: 1% 2%;
 }
 /* TODO reduce/fix margins of accordion */
-/* TODO add placeholder for images/actions in selectable */
 
 .report_container .report_item {
     position: relative;
