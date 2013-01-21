@@ -8,7 +8,7 @@
     <name>Tricode Checkin application</name>
     <groupId>com.tricode.checkin</groupId>
     <artifactId>tri-checkin-web</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <description>Tricode Checkin application</description>
     <packaging>war</packaging>
 
