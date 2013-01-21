@@ -8,7 +8,7 @@ body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
 .selectable .ui-highlited { background: #FECA40; }
 
 .selectable { list-style-type: none; margin: 0; padding: 0; }
-.selectable li { margin: 0.5% 0.75%; float: left; width: 48%; height: 80px; cursor: pointer; }
+.selectable li { margin: 0.5% 0.75%; float: left; width: 48%; height: 80px; }
 
 .employee span.name { float: left; margin: 10px 0 0 10px; }
 .employee .fff-icon { float: right; margin: 5px 5px 0 0; }
@@ -40,16 +40,28 @@ body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
 .ui-accordion .ui-accordion-content {
 	padding: 0.5% 2%;
 }
-/* TODO reduce/fix margins of accordion */
+
+.report_filter_item { width: 250px; clear: both; }
+.report_filter_item span { margin-top: 1px; }
+.report_filter_item select { float: right; }
+
+.report_container .report_header {
+    position: relative;
+    left: 20%;
+    width: 60%;
+    height: 70px;
+    min-width: 550px;
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-bottom: 2px;
+}
 
 .report_container .report_item {
     position: relative;
     left: 20%;
     width: 60%;
     min-width: 550px;
+    padding-top: 10px;
+    padding-left: 10px;
     margin-bottom: 2px;
-}
-
-.report_item .left {
-    padding: 10px;
 }

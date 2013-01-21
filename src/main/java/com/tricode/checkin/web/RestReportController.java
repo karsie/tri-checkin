@@ -7,12 +7,14 @@ import com.tricode.checkin.service.ReportingService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("rest/report")
@@ -28,7 +30,9 @@ public class RestReportController {
     }
 
     @RequestMapping(value = "list/week", method = RequestMethod.GET)
-    public @ResponseBody Collection<WeekReport> listWeekReport() {
+    public
+    @ResponseBody
+    Collection<WeekReport> listWeekReport() {
         final DateTime currentDate = new DateTime();
         final Collection<Person> persons = personService.list();
 
@@ -39,5 +43,19 @@ public class RestReportController {
         }
 
         return results;
+    }
+
+    @RequestMapping(value = "list/years", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Integer> listYears() {
+        return reportingService.listStoredYears();
+    }
+
+    @RequestMapping(value = "list/weeks/{year}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Integer> listWeeks(@PathVariable Integer year) {
+        return reportingService.listStoredWeeks(year);
     }
 }

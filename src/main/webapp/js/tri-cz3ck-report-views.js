@@ -10,7 +10,8 @@ var WeekReportListView = Backbone.View.extend({
     },
 
     render: function() {
-        this.$el.html('');
+        this.renderFilter();
+
         this.collection.forEach(this.renderOne, this);
     },
 
@@ -18,6 +19,68 @@ var WeekReportListView = Backbone.View.extend({
         var report = this.options.reportDetails.find(function(reportDetail) {return reportDetail.get('userId') == model.get('id');});
         var itemView = new WeekReportItemView({ model: model, report: report });
         itemView.render(this.$el);
+    },
+
+    renderFilter: function() {
+        var filterView = new WeekReportFilterView;
+        filterView.render(this.$el);
+    }
+});
+
+var WeekReportFilterView = Backbone.View.extend({
+    template: _.template('<div id="filter" class="report_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
+
+    render: function(parent) {
+        var elementId = '#filter';
+        var $el = $(elementId);
+        if ($el.length == 0) {
+            parent.append(this.template());
+            $el = $(elementId);
+        }
+
+        var filter_week = $('#filter_week');
+        filter_week.hide();
+
+        var select_week = $('#select_week');
+        select_week.change(function (event) {
+
+        });
+
+        var select_year = $('#select_year');
+        select_year.change(function (event) {
+            var year = event.currentTarget.value;
+            $.getJSON('/checkin/rest/report/list/weeks/' + year, function (data) {
+                var options = select_week.prop('options');
+                $('option', select_week).remove();
+
+                filter_week.show();
+                if (data.length == 0) {
+                    options[options.length] = new Option('Nothing', -1);
+                } else {
+                    _.each(data, function(week) {
+                        options[options.length] = new Option(week, week);
+                    });
+                    select_week.val(_.max(data));
+                    select_week.trigger('change');
+                }
+            });
+        });
+
+
+        $.getJSON('/checkin/rest/report/list/years', function (data) {
+            var options = select_year.prop('options');
+            $('option', select_year).remove();
+
+            if (data.length == 0) {
+                options[options.length] = new Option('Nothing', -1);
+            } else {
+                _.each(data, function(year) {
+                    options[options.length] = new Option(year, year);
+                });
+                select_year.val(Today.getFullYear());
+                select_year.trigger('change');
+            }
+        });
     }
 });
 

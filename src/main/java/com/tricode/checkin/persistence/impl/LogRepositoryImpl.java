@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
-import java.util.List;
 
 @Repository
 @Transactional
@@ -33,7 +32,7 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
 
     @Override
     public <T extends Log> Collection<T> findByUserIdAndTimeRange(Class<T> logClass, int userId, long timestampFrom, long timestampTo) {
-        final QueryBuilderFactory.QueryBuilder<T> builder = queryBuilderFactory.newBuilder(logClass);
+        final QueryBuilderFactory.SimpleQueryBuilder<T> builder = queryBuilderFactory.newBuilder(logClass);
 
         builder.and(builder.equal(Log_.userId, userId),
                 builder.between(Log_.timestamp, timestampFrom, timestampTo))
@@ -49,7 +48,7 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
 
     @Override
     public StatusChangeLog getLastChangeByUserIdAndStatus(int userId, LocationStatus status) {
-        final QueryBuilderFactory.QueryBuilder<StatusChangeLog> builder = queryBuilderFactory
+        final QueryBuilderFactory.SimpleQueryBuilder<StatusChangeLog> builder = queryBuilderFactory
                 .newBuilder(StatusChangeLog.class);
 
         builder.and(builder.equal(StatusChangeLog_.userId, userId),

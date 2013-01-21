@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class PersistentReportingService implements ReportingService {
@@ -49,5 +51,15 @@ public class PersistentReportingService implements ReportingService {
             eventManager.raiseCreateEvent(saved);
         }
         return saved;
+    }
+
+    @Override
+    public List<Integer> listStoredYears() {
+        return weekReportRepository.findYears();
+    }
+
+    @Override
+    public List<Integer> listStoredWeeks(int year) {
+        return weekReportRepository.findWeeks(year);
     }
 }
