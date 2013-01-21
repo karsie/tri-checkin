@@ -26,7 +26,7 @@ var Employee = Backbone.Model.extend({
 
 var Employees = Backbone.Collection.extend({
     model: Employee,
-    url: '/checkin/person',
+    url: '../checkin/person',
 	sortAttribute: 'last',
 	
 	comparator: function(model) {
@@ -75,5 +75,5 @@ var ReportData = Backbone.Model.extend({
 
 var ReportDataList = Backbone.Collection.extend({
     model: ReportData,
-    url: '/checkin/report/list'
+    url: '../checkin/report/list'
 });
