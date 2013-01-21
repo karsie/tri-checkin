@@ -29,10 +29,10 @@ requirejs.config({
 });
 
 define(['tri-cz3ck-report-views${minifySuffix}'], function () {
-    var reportList = new ReportDataList;
+    var reportList = new WeekReportDataList;
     var employees = new Employees;
     $(function() {
-        var report = new ReportListView({id: 'report', collection: employees, reportDetails: reportList });
+        var report = new WeekReportListView({id: 'report', collection: employees, reportDetails: reportList });
 
         reportList.fetch({success: function() {
             employees.fetch();

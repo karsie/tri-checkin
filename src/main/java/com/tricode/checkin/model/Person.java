@@ -1,5 +1,6 @@
 package com.tricode.checkin.model;
 
+import org.hibernate.annotations.Index;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +19,7 @@ public class Person implements Serializable, Cloneable {
     @GeneratedValue
     private Integer id;
 
+    @Index(name = "IDX_EXTERNAL_ID")
     private String externalId;
 
     private String name;

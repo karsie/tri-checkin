@@ -3,6 +3,7 @@ var ONE_DAY = 1000 * 60 * 60 * 24;
 var Today = new Date();
 
 var Employee = Backbone.Model.extend({
+    urlRoot: '/checkin/rest/person',
 	getShortNotation: function(attribute) {
 		return this.get(attribute);
 	},
@@ -26,7 +27,7 @@ var Employee = Backbone.Model.extend({
 
 var Employees = Backbone.Collection.extend({
     model: Employee,
-    url: '/checkin/person',
+    url: '/checkin/rest/person/list',
 	sortAttribute: 'last',
 	
 	comparator: function(model) {
@@ -69,11 +70,11 @@ var EmployeesByStatus = Backbone.Subset.extend({
 	}
 });
 
-var ReportData = Backbone.Model.extend({
+var WeekReportData = Backbone.Model.extend({
     idAttribute: 'userId'
 });
 
-var ReportDataList = Backbone.Collection.extend({
-    model: ReportData,
-    url: '/checkin/report/list'
+var WeekReportDataList = Backbone.Collection.extend({
+    model: WeekReportData,
+    url: '/checkin/rest/report/list/week'
 });

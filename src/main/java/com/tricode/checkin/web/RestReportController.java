@@ -15,25 +15,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Controller
-@RequestMapping("report")
-public class ReportingController {
+@RequestMapping("rest/report")
+public class RestReportController {
 
     private final PersonService personService;
     private final ReportingService reportingService;
 
     @Autowired
-    public ReportingController(PersonService personService, ReportingService reportingService) {
+    public RestReportController(PersonService personService, ReportingService reportingService) {
         this.personService = personService;
         this.reportingService = reportingService;
     }
 
-    @RequestMapping
-    public String index() {
-        return "report";
-    }
-
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public @ResponseBody Collection<WeekReport> getReportData() {
+    @RequestMapping(value = "list/week", method = RequestMethod.GET)
+    public @ResponseBody Collection<WeekReport> listWeekReport() {
         final DateTime currentDate = new DateTime();
         final Collection<Person> persons = personService.list();
 

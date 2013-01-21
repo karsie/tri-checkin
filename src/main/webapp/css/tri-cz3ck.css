@@ -1,4 +1,4 @@
-body, div { font-family: Calibri, sans-serif !important; }
+body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
 
 .ui-effects-transfer { border: 2px dotted gray; }
 .halve { width:48%; }
@@ -16,6 +16,8 @@ body, div { font-family: Calibri, sans-serif !important; }
 .left { float: left; }
 .right { float: right; }
 .clear { clear: both; }
+
+.smallprint { font-size: 9pt; }
 
 .ui-icon.tri-icon-eating-in {
     background-image:url('images/restaurant.png')!important;
