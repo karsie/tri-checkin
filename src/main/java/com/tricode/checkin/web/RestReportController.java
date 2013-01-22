@@ -7,33 +7,32 @@ import com.tricode.checkin.service.ReportingService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
-@RequestMapping("report")
-public class ReportingController {
+@RequestMapping("rest/report")
+public class RestReportController {
 
     private final PersonService personService;
     private final ReportingService reportingService;
 
     @Autowired
-    public ReportingController(PersonService personService, ReportingService reportingService) {
+    public RestReportController(PersonService personService, ReportingService reportingService) {
         this.personService = personService;
         this.reportingService = reportingService;
     }
 
-    @RequestMapping
-    public String index() {
-        return "report";
-    }
-
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public @ResponseBody Collection<WeekReport> getReportData() {
+    @RequestMapping(value = "list/week", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Collection<WeekReport> listWeekReport() {
         final DateTime currentDate = new DateTime();
         final Collection<Person> persons = personService.list();
 
@@ -44,5 +43,19 @@ public class ReportingController {
         }
 
         return results;
+    }
+
+    @RequestMapping(value = "list/years", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Integer> listYears() {
+        return reportingService.listStoredYears();
+    }
+
+    @RequestMapping(value = "list/weeks/{year}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Integer> listWeeks(@PathVariable Integer year) {
+        return reportingService.listStoredWeeks(year);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -19,8 +20,7 @@ public class WeekReportRepositoryImpl extends AbstractRepository<WeekReport> imp
 
     @Override
     public WeekReport getByUserIdYearAndWeek(int userId, int year, int week) {
-        final QueryBuilderFactory.QueryBuilder<WeekReport> builder = queryBuilderFactory
-                                .newBuilder(WeekReport.class);
+        final QueryBuilderFactory.SimpleQueryBuilder<WeekReport> builder = queryBuilderFactory.newBuilder(WeekReport.class);
 
         builder.and(builder.equal(WeekReport_.userId, userId),
                 builder.equal(WeekReport_.year, year),
@@ -31,5 +31,22 @@ public class WeekReportRepositoryImpl extends AbstractRepository<WeekReport> imp
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Integer> findYears() {
+        final QueryBuilderFactory.AdvancedQueryBuilder<Integer, WeekReport> builder = queryBuilderFactory.newBuilder(Integer.class, WeekReport.class);
+        builder.distinct(WeekReport_.year);
+
+        return entityManager.createQuery(builder.toQuery()).getResultList();
+    }
+
+    @Override
+    public List<Integer> findWeeks(int year) {
+        final QueryBuilderFactory.AdvancedQueryBuilder<Integer, WeekReport> builder = queryBuilderFactory.newBuilder(Integer.class, WeekReport.class);
+        builder.where(WeekReport_.year, year);
+        builder.distinct(WeekReport_.week);
+
+        return entityManager.createQuery(builder.toQuery()).getResultList();
     }
 }

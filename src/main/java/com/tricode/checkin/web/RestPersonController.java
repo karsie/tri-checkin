@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @Controller
-@RequestMapping("person")
-public class PersonController {
+@RequestMapping("rest/person")
+public class RestPersonController {
 
     private final PersonService personService;
 
     @Autowired
-    public PersonController(PersonService personService) {
+    public RestPersonController(PersonService personService) {
         this.personService = personService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "list", method = RequestMethod.GET)
     public
     @ResponseBody
     Collection<Person> getPersons() {
