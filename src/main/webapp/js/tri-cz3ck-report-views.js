@@ -7,11 +7,10 @@ var WeekReportListView = Backbone.View.extend({
     initialize: function() {
         this.setElement($('#' + this.id));
         this.collection.bind("reset", this.render, this);
+        this.renderFilter();
     },
 
     render: function() {
-        this.renderFilter();
-
         this.collection.forEach(this.renderOne, this);
     },
 
@@ -23,18 +22,28 @@ var WeekReportListView = Backbone.View.extend({
 
     renderFilter: function() {
         var filterView = new WeekReportFilterView;
-        filterView.render(this.$el);
+        filterView.render(this);
+    },
+
+    filterChange: function(delegate) {
+        this.filterChangeHandler = delegate;
+    },
+
+    triggerFilterChange: function(year, week) {
+        if (typeof this.filterChangeHandler != 'undefined' && this.filterChangeHandler != null) {
+            this.filterChangeHandler(year, week);
+        }
     }
 });
 
 var WeekReportFilterView = Backbone.View.extend({
     template: _.template('<div id="filter" class="report_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
 
-    render: function(parent) {
+    render: function(parentView) {
         var elementId = '#filter';
         var $el = $(elementId);
         if ($el.length == 0) {
-            parent.append(this.template());
+            parentView.$el.append(this.template());
             $el = $(elementId);
         }
 
@@ -42,14 +51,15 @@ var WeekReportFilterView = Backbone.View.extend({
         filter_week.hide();
 
         var select_week = $('#select_week');
-        select_week.change(function (event) {
+        var select_year = $('#select_year');
 
+        select_week.change(function (event) {
+            parentView.triggerFilterChange(select_year.val(), event.currentTarget.value);
         });
 
-        var select_year = $('#select_year');
         select_year.change(function (event) {
             var year = event.currentTarget.value;
-            $.getJSON('/checkin/rest/report/list/weeks/' + year, function (data) {
+            $.getJSON('../checkin/rest/report/list/weeks/' + year, function (data) {
                 var options = select_week.prop('options');
                 $('option', select_week).remove();
 
@@ -66,8 +76,7 @@ var WeekReportFilterView = Backbone.View.extend({
             });
         });
 
-
-        $.getJSON('/checkin/rest/report/list/years', function (data) {
+        $.getJSON('../checkin/rest/report/list/years', function (data) {
             var options = select_year.prop('options');
             $('option', select_year).remove();
 

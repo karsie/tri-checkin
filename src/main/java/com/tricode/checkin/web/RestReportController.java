@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -32,14 +33,13 @@ public class RestReportController {
     @RequestMapping(value = "list/week", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection<WeekReport> listWeekReport() {
-        final DateTime currentDate = new DateTime();
+    Collection<WeekReport> listWeekReport(@RequestParam Integer year, @RequestParam Integer week) {
         final Collection<Person> persons = personService.list();
 
         final Collection<WeekReport> results = new ArrayList<WeekReport>(persons.size());
 
         for (Person person : persons) {
-            results.add(reportingService.get(person.getId(), currentDate.getWeekyear(), currentDate.getWeekOfWeekyear()));
+            results.add(reportingService.get(person.getId(), year, week));
         }
 
         return results;
