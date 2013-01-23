@@ -6,6 +6,7 @@ import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
 import com.tricode.checkin.xml.XmlEmployee;
 import com.tricode.checkin.xml.XmlEmployees;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,10 +75,16 @@ public class LoadEmployeesXmlScheduledTask {
     @SuppressWarnings("unchecked")
     private <T> boolean importXmlFile(File xmlFile, Class<T> xmlClass) throws JAXBException {
         if (xmlFile.exists()) {
-            final T xmlObjects = (T) unmarshaller.unmarshal(xmlFile);
-            importXmlObjects(xmlObjects, xmlClass);
+            try {
+                final String xmlData = IOUtils.toString(xmlFile.toURI(), "UTF-8");
 
-            return true;
+                final T xmlObjects = (T) unmarshaller.unmarshal(new StringReader(xmlData));
+                importXmlObjects(xmlObjects, xmlClass);
+
+                return true;
+            } catch (IOException e) {
+                log.error("error reading xml file", e);
+            }
         }
         return false;
     }
