@@ -14,11 +14,6 @@ import java.util.Collection;
 public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRepository {
 
     @Override
-    protected Class<Log> getDaoClass() {
-        return Log.class;
-    }
-
-    @Override
     public <T extends Log> Collection<T> findByUserId(Class<T> logClass, int userId) {
         final CriteriaQuery<T> query = queryBuilderFactory.newBuilder(logClass).where(Log_.userId, userId).toQuery();
 
@@ -55,7 +50,7 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
                 builder.equal(StatusChangeLog_.statusTo, status))
                 .orderBy(StatusChangeLog_.timestamp, false);
         try {
-            return entityManager.createQuery(builder.toQuery()).getSingleResult();
+            return entityManager.createQuery(builder.toQuery()).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

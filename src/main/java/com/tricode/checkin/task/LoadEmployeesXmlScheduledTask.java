@@ -45,7 +45,7 @@ public class LoadEmployeesXmlScheduledTask {
         }
     }
 
-    @Scheduled(cron = "0 3 * * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     @PostConstruct
     public void runTask() {
         if (unmarshaller != null) {

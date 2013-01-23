@@ -243,6 +243,7 @@ var WeekReportItemView = Backbone.View.extend({
         var hours = Math.floor(minutes / 60);
 
         if (hours > 0) {
+            minutes = minutes - (hours * 60);
             return hours + "u " + minutes + "m";
         } else if (minutes > 0) {
             return minutes + "m";

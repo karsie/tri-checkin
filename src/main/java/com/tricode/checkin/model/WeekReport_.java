@@ -6,11 +6,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import java.util.List;
 
 @StaticMetamodel(WeekReport.class)
-public class WeekReport_ {
-
-    public static volatile SingularAttribute<WeekReport, Integer> id;
-
-    public static volatile SingularAttribute<WeekReport, Integer> userId;
+public class WeekReport_ extends UserReport_ {
 
     public static volatile SingularAttribute<WeekReport, Integer> year;
 

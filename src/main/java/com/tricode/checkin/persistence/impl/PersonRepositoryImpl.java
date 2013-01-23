@@ -8,14 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.Collection;
 
 @Repository
 @Transactional
 public class PersonRepositoryImpl extends AbstractRepository<Person> implements PersonRepository {
 
     @Override
-    protected Class<Person> getDaoClass() {
-        return Person.class;
+    public Person get(int id) {
+        return entityManager.find(Person.class, id);
     }
 
     @Override
@@ -27,5 +28,10 @@ public class PersonRepositoryImpl extends AbstractRepository<Person> implements 
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public Collection<Person> findAll() {
+        return entityManager.createQuery(queryBuilderFactory.newBuilder(Person.class).toQuery()).getResultList();
     }
 }

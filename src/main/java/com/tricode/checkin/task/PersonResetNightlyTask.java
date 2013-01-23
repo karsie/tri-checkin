@@ -18,7 +18,7 @@ public class PersonResetNightlyTask {
         this.personService = personService;
     }
 
-    @Scheduled(cron = "0 1 * * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void runTask() {
         final Collection<Person> persons = personService.list();
         for (Person person : persons) {

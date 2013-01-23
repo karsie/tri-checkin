@@ -1,4 +1,4 @@
-package com.tricode.checkin.web;
+package com.tricode.checkin.web.impl;
 
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.model.WeekReport;

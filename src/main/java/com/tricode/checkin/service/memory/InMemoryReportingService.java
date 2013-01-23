@@ -1,6 +1,7 @@
 package com.tricode.checkin.service.memory;
 
 import com.tricode.checkin.event.manager.EventManager;
+import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.service.ReportingService;
 import org.apache.commons.lang.NotImplementedException;
@@ -14,7 +15,7 @@ import java.util.Map;
 @Service
 public class InMemoryReportingService implements ReportingService {
 
-    private final Map<String, WeekReport> data = new HashMap<String, WeekReport>();
+    private final Map<String, UserReport> data = new HashMap<String, UserReport>();
 
     private final EventManager eventManager;
 
@@ -25,7 +26,7 @@ public class InMemoryReportingService implements ReportingService {
 
     @Override
     public WeekReport get(int userId, int year, int week) {
-        WeekReport weekReport = data.get(toId(userId, year, week));
+        WeekReport weekReport = (WeekReport) data.get(toId(userId, year, week));
         if (weekReport == null) {
             weekReport = WeekReport.Builder.withUserId(userId).withYear(year).withWeek(week).get();
         }
@@ -33,14 +34,14 @@ public class InMemoryReportingService implements ReportingService {
     }
 
     @Override
-    public WeekReport save(WeekReport weekReport) {
-        final WeekReport oldValue = data.put(toId(weekReport), weekReport);
+    public <T extends UserReport> T save(T userReport) {
+        final UserReport oldValue = data.put(toId(userReport), userReport);
         if (oldValue == null) {
-            eventManager.raiseCreateEvent(weekReport);
+            eventManager.raiseCreateEvent(userReport);
         } else {
-            eventManager.raiseUpdateEvent(oldValue, weekReport);
+            eventManager.raiseUpdateEvent(oldValue, userReport);
         }
-        return weekReport;
+        return userReport;
     }
 
     @Override
@@ -57,7 +58,12 @@ public class InMemoryReportingService implements ReportingService {
         return userId + "-" + year + "-" + week;
     }
 
-    private static String toId(WeekReport weekReport) {
-        return toId(weekReport.getUserId(), weekReport.getYear(), weekReport.getWeek());
+    private static String toId(UserReport userReport) {
+        if (userReport instanceof WeekReport) {
+            WeekReport weekReport = (WeekReport) userReport;
+            return toId(userReport.getUserId(), weekReport.getYear(), weekReport.getWeek());
+        } else {
+            return null;
+        }
     }
 }

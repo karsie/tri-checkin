@@ -9,24 +9,19 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class WeekReport extends UserReport implements Serializable {
+public class MonthReport extends UserReport implements Serializable {
 
-    private static final long serialVersionUID = -7783307886739901626L;
+    private static final long serialVersionUID = 881412293349374207L;
 
     @NaturalId
     private int year;
 
     @NaturalId
-    private int week;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "id"))
-    private List<Long> days;
+    private int month;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
@@ -41,20 +36,12 @@ public class WeekReport extends UserReport implements Serializable {
         this.year = year;
     }
 
-    public int getWeek() {
-        return week;
+    public int getMonth() {
+        return month;
     }
 
-    public void setWeek(int week) {
-        this.week = week;
-    }
-
-    public List<Long> getDays() {
-        return days;
-    }
-
-    public void setDays(List<Long> days) {
-        this.days = days;
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     public List<Boolean> getEatingIn() {
@@ -67,18 +54,21 @@ public class WeekReport extends UserReport implements Serializable {
 
     public static class Builder {
 
-        private final WeekReport weekReport;
+        private final MonthReport monthReport;
 
         private Builder(Integer id) {
-            weekReport = new WeekReport();
-            weekReport.setId(id);
-            weekReport.setDays(Arrays.asList(0L, 0L, 0L, 0L, 0L));
-            weekReport.setEatingIn(Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+            monthReport = new MonthReport();
+            monthReport.setId(id);
+            final List<Boolean> defaultList = new ArrayList<Boolean>(31);
+            for (int i = 0; i < 31; i++) {
+                defaultList.add(Boolean.FALSE);
+            }
+            monthReport.setEatingIn(defaultList);
         }
 
         private Builder(Integer id, int userId) {
             this(id);
-            weekReport.setUserId(userId);
+            monthReport.setUserId(userId);
         }
 
         public static Builder withId(int id) {
@@ -94,27 +84,17 @@ public class WeekReport extends UserReport implements Serializable {
         }
 
         public Builder withYear(int year) {
-            weekReport.setYear(year);
+            monthReport.setYear(year);
             return this;
         }
 
-        public Builder withWeek(int week) {
-            weekReport.setWeek(week);
+        public Builder withMonth(int month) {
+            monthReport.setMonth(month);
             return this;
         }
 
-        public Builder withDays(List<Long> days) {
-            weekReport.setDays(days);
-            return this;
-        }
-
-        public Builder withDay(int index, Long value) {
-            weekReport.getDays().set(index, value);
-            return this;
-        }
-
-        public WeekReport get() {
-            return weekReport;
+        public MonthReport get() {
+            return monthReport;
         }
     }
 }
