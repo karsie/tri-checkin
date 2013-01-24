@@ -76,7 +76,7 @@ public class LoadEmployeesXmlScheduledTask {
     private <T> boolean importXmlFile(File xmlFile, Class<T> xmlClass) throws JAXBException {
         if (xmlFile.exists()) {
             try {
-                final String xmlData = IOUtils.toString(xmlFile.toURI(), "UTF-8");
+                final String xmlData = IOUtils.toString(xmlFile.toURI(), checkinConfig.getXmlFileEncoding());
 
                 final T xmlObjects = (T) unmarshaller.unmarshal(new StringReader(xmlData));
                 importXmlObjects(xmlObjects, xmlClass);
