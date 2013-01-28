@@ -3,3 +3,4 @@
 *.iws
 Data.local.xml
 checkin.local.properties
+.gradle
