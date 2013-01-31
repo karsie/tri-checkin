@@ -10,7 +10,8 @@ var EmployeeListView = Backbone.View.extend({
 		if (typeof this.options.buttons != 'undefined') {
 			this.renderButtons(this.options.buttons);
 		}
-		
+//        this.renderTitle();
+
         this.collection.bind("reset", this.render, this);
     },
 
@@ -28,7 +29,7 @@ var EmployeeListView = Backbone.View.extend({
 		if (this.renderState) {
 			this.renderAccordion();
 			this.renderPages();
-			
+
 			this.collection.forEach(this.renderOne, this);
 			this.refreshAccordion();
 		}
@@ -60,8 +61,18 @@ var EmployeeListView = Backbone.View.extend({
 	
 	renderButtons: function(buttons) {
 		var buttonView = new EmployeeButtonView({ id: this.id + 'Buttons', sourceView: this, collection: this.collection, buttons: buttons });
-		this.$el.append(buttonView.render().el);
+        var $buttons = $(buttonView.render().el);
+        $buttons.addClass("buttons");
+		this.$el.append($buttons);
 	},
+
+    renderTitle: function() {
+        var titleId = this.id + 'Title';
+        this.$el.append(this.template({ id: titleId }));
+        var $title = $('#' + titleId);
+        $title.addClass("ui-widget-content").addClass("ui-corner-all").addClass("title");
+        $title.html('<h4>' + this.options.title + '</h4>');
+    },
 	
 	renderAccordion: function() {
 		var accordionId = this.id + 'Accordion';

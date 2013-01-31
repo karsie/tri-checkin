@@ -10,6 +10,9 @@ body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
 .selectable { list-style-type: none; margin: 0; padding: 0; }
 .selectable li { margin: 0.5% 0.75%; float: left; width: 48%; height: 80px; }
 
+.buttons { height: 41px; }
+.title h4 { margin: 8px; }
+
 .employee span.name { float: left; margin: 10px 0 0 10px; }
 .employee .fff-icon { float: right; margin: 5px 5px 0 0; }
 

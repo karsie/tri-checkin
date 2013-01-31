@@ -4,10 +4,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -26,11 +23,13 @@ public class WeekReport extends UserReport implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
+    @OrderColumn(name = "sorting")
     private List<Long> days;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
+    @OrderColumn(name = "sorting")
     private List<Boolean> eatingIn;
 
     public int getYear() {

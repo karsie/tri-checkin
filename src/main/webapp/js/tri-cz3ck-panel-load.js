@@ -38,7 +38,7 @@ define(['tri-cz3ck-panel-views${minifySuffix}'], function () {
             { attribute: 'last', text: 'Achternaam' }
         ];
         var clearOptions = { label: 'Iedereen uitchecken', text: false, icons: { primary: "fff-icon-resultset-last" } };
-        var leftView = new EmployeeListView({ id: 'ctleft', collection: inside, status: 'IN', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions, info: true, clear: false, clearOptions: clearOptions } });
+        var leftView = new EmployeeListView({ id: 'ctleft', title: 'Aanwezig', collection: inside, status: 'IN', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions, info: true, clear: false, clearOptions: clearOptions } });
         leftView.clear(function () {
             rightView.suspendRender();
             leftView.suspendRender();
@@ -46,7 +46,7 @@ define(['tri-cz3ck-panel-views${minifySuffix}'], function () {
             rightView.resumeRender();
             leftView.resumeRender();
         });
-        var rightView = new EmployeeListView({ id: 'ctright', collection: outside, status: 'OUT', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions } });
+        var rightView = new EmployeeListView({ id: 'ctright', title: 'Afwezig', collection: outside, status: 'OUT', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions } });
 
         leftView.options.targetView = rightView;
         rightView.options.targetView = leftView;
