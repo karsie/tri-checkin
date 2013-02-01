@@ -28,16 +28,13 @@ public class EatingInLogCreatedListener implements EventListener<EatingInLog> {
 
         final DateTime now = DateTime.now();
         int dayIndex = now.getDayOfWeek() - 1; // MONDAY = 1, so index = 0
-        if (dayIndex == 6) { // SUNDAY
-            dayIndex = 0; // becomes MONDAY
-        } else if (dayIndex == 5) { // SATURDAY
-            dayIndex = 4; // becomes FRIDAY
+
+        if (dayIndex >= 0 && dayIndex < 5) {
+            final WeekReport weekReport = reportingService.get(objectAfter.getUserId(), now.getWeekyear(), now.getWeekOfWeekyear());
+
+            weekReport.getEatingIn().set(dayIndex, objectAfter.isEatingIn());
+            reportingService.save(weekReport);
         }
-
-        final WeekReport weekReport = reportingService.get(objectAfter.getUserId(), now.getWeekyear(), now.getWeekOfWeekyear());
-
-        weekReport.getEatingIn().set(dayIndex, objectAfter.isEatingIn());
-        reportingService.save(weekReport);
     }
 
     @Override

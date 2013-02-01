@@ -8,6 +8,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OrderColumn;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class MonthReport extends UserReport implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
+    @OrderColumn(name = "sorting")
     private List<Boolean> eatingIn;
 
     public int getYear() {

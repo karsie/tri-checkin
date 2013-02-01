@@ -10,7 +10,7 @@ var EmployeeListView = Backbone.View.extend({
 		if (typeof this.options.buttons != 'undefined') {
 			this.renderButtons(this.options.buttons);
 		}
-//        this.renderTitle();
+        this.renderTitle();
 
         this.collection.bind("reset", this.render, this);
     },

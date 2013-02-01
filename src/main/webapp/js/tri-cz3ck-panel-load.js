@@ -46,7 +46,7 @@ define(['tri-cz3ck-panel-views${minifySuffix}'], function () {
             rightView.resumeRender();
             leftView.resumeRender();
         });
-        var rightView = new EmployeeListView({ id: 'ctright', title: 'Afwezig', collection: outside, status: 'OUT', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions } });
+        var rightView = new EmployeeListView({ id: 'ctright', title: 'Buiten de deur', collection: outside, status: 'OUT', pageSize: 8, buttons: { sort: true, sortOptions: genericSortOptions } });
 
         leftView.options.targetView = rightView;
         rightView.options.targetView = leftView;
