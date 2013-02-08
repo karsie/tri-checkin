@@ -72,5 +72,7 @@ javascript.source {
     }
 }
 
-
+jettyRun.doFirst {
+    System.setProperty('xmlDataFile', 'Data.xml')
+}
 
