@@ -13,6 +13,7 @@ repositories {
 
 apply plugin: 'war'
 apply plugin: 'js'
+apply plugin: 'jetty'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -35,10 +36,10 @@ dependencies {
 	compile "org.slf4j:slf4j-api:${slf4j_version}"
 	compile "org.slf4j:slf4j-log4j12:${slf4j_version}"
 	compile "org.slf4j:jcl-over-slf4j:${slf4j_version}"
-        compile "org.springframework:spring-core:${spring_version}"
-        compile "org.springframework:spring-orm:${spring_version}"
-        compile "org.springframework:spring-tx:${spring_version}"
-        compile "org.springframework:spring-webmvc:${spring_version}"
+    compile "org.springframework:spring-core:${spring_version}"
+    compile "org.springframework:spring-orm:${spring_version}"
+    compile "org.springframework:spring-tx:${spring_version}"
+    compile "org.springframework:spring-webmvc:${spring_version}"
 
 	runtime "com.h2database:h2:1.3.170"
 	runtime "mysql:mysql-connector-java:5.1.22"
@@ -71,21 +72,7 @@ javascript.source {
     }
 }
 
-javascript.source.dev.js.files.eachWithIndex { jsFile, idx ->
-    project.tasks.add(name: "do-jsMinify_${jsFile.name}", type: com.eriwen.gradle.js.tasks.MinifyJsTask) {
-        ext.destName = jsFile.name.replaceAll(".js", ".min.js")
-        source = jsFile
-        dest = "${buildDir}/js/${jsFile.name.replaceAll('.js', '.min.js')}"
-    }
+jettyRun.doFirst {
+    System.setProperty('xmlDataFile', 'Data.xml')
 }
-task jsMinify(dependsOn: tasks.matching { Task task -> task.name.startsWith("do-jsMinify")})
-war.dependsOn jsMinify
-
-war.webInf {
-    from("${buildDir}/js/") {
-        include "**/*.min.js"
-    }
-    into "/js/"
-}
-
 
