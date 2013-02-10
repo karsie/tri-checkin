@@ -1,6 +1,7 @@
 package com.tricode.checkin.service.persistent;
 
 import com.tricode.checkin.event.manager.EventManager;
+import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.persistence.UserReportRepository;
@@ -16,17 +17,17 @@ import java.util.List;
 @Transactional
 public class PersistentReportingService extends AbstractService implements ReportingService {
 
-    private final UserReportRepository weekReportRepository;
+    private final UserReportRepository userReportRepository;
 
     @Autowired
-    public PersistentReportingService(UserReportRepository weekReportRepository, EventManager eventManager) {
+    public PersistentReportingService(UserReportRepository userReportRepository, EventManager eventManager) {
         super(eventManager);
-        this.weekReportRepository = weekReportRepository;
+        this.userReportRepository = userReportRepository;
     }
 
     @Override
-    public WeekReport get(int userId, int year, int week) {
-        WeekReport weekReport = weekReportRepository.getWeekReportByYearAndWeek(userId, year, week);
+    public WeekReport getWeek(int userId, int year, int week) {
+        WeekReport weekReport = userReportRepository.getWeekReportByYearAndWeek(userId, year, week);
         if (weekReport == null) {
             weekReport = WeekReport.Builder.withUserId(userId).withYear(year).withWeek(week).get();
         }
@@ -34,15 +35,24 @@ public class PersistentReportingService extends AbstractService implements Repor
     }
 
     @Override
+    public MonthReport getMonth(int userId, int year, int month) {
+        MonthReport monthReport = userReportRepository.getMonthReportByYearAndMonth(userId, year, month);
+        if (monthReport == null) {
+            monthReport = MonthReport.Builder.withUserId(userId).withYear(year).withMonth(month).get();
+        }
+        return monthReport;
+    }
+
+    @Override
     public <T extends UserReport> T save(T userReport) {
         final UserReport oldValue;
         if (userReport.getId() != null) {
-            oldValue = weekReportRepository.get(userReport.getClass(), userReport.getId()).clone();
+            oldValue = userReportRepository.get(userReport.getClass(), userReport.getId()).clone();
         } else {
             oldValue = null;
         }
 
-        final T saved = weekReportRepository.save(userReport);
+        final T saved = userReportRepository.save(userReport);
 
         if (oldValue != null) {
             eventManager.raiseUpdateEvent(oldValue, userReport);
@@ -53,12 +63,22 @@ public class PersistentReportingService extends AbstractService implements Repor
     }
 
     @Override
-    public List<Integer> listStoredYears() {
-        return weekReportRepository.findWeekReportYears();
+    public List<Integer> listWeekReportYears() {
+        return userReportRepository.findWeekReportYears();
     }
 
     @Override
-    public List<Integer> listStoredWeeks(int year) {
-        return weekReportRepository.findWeekReportWeeks(year);
+    public List<Integer> listWeekReportWeeks(int year) {
+        return userReportRepository.findWeekReportWeeks(year);
+    }
+
+    @Override
+    public List<Integer> listMonthReportYears() {
+        return userReportRepository.findMonthReportYears();
+    }
+
+    @Override
+    public List<Integer> listMonthReportMonths(int year) {
+        return userReportRepository.findMonthReportMonths(year);
     }
 }

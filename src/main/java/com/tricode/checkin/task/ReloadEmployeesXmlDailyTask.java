@@ -25,16 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class LoadEmployeesXmlScheduledTask {
+public class ReloadEmployeesXmlDailyTask {
 
-    private static final Logger log = LoggerFactory.getLogger(LoadEmployeesXmlScheduledTask.class);
+    private static final Logger log = LoggerFactory.getLogger(ReloadEmployeesXmlDailyTask.class);
 
     private final CheckinConfig checkinConfig;
     private final PersonService personService;
     private Unmarshaller unmarshaller;
 
     @Autowired
-    public LoadEmployeesXmlScheduledTask(CheckinConfig checkinConfig, PersonService personService) {
+    public ReloadEmployeesXmlDailyTask(CheckinConfig checkinConfig, PersonService personService) {
         this.checkinConfig = checkinConfig;
         this.personService = personService;
 

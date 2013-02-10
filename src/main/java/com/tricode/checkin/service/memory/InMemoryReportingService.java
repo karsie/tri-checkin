@@ -1,6 +1,7 @@
 package com.tricode.checkin.service.memory;
 
 import com.tricode.checkin.event.manager.EventManager;
+import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.service.ReportingService;
@@ -25,12 +26,17 @@ public class InMemoryReportingService implements ReportingService {
     }
 
     @Override
-    public WeekReport get(int userId, int year, int week) {
+    public WeekReport getWeek(int userId, int year, int week) {
         WeekReport weekReport = (WeekReport) data.get(toId(userId, year, week));
         if (weekReport == null) {
             weekReport = WeekReport.Builder.withUserId(userId).withYear(year).withWeek(week).get();
         }
         return weekReport;
+    }
+
+    @Override
+    public MonthReport getMonth(int userId, int year, int month) {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -45,12 +51,22 @@ public class InMemoryReportingService implements ReportingService {
     }
 
     @Override
-    public List<Integer> listStoredYears() {
+    public List<Integer> listWeekReportYears() {
         throw new NotImplementedException();
     }
 
     @Override
-    public List<Integer> listStoredWeeks(int year) {
+    public List<Integer> listWeekReportWeeks(int year) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public List<Integer> listMonthReportYears() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public List<Integer> listMonthReportMonths(int year) {
         throw new NotImplementedException();
     }
 

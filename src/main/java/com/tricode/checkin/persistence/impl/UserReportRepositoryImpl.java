@@ -1,5 +1,7 @@
 package com.tricode.checkin.persistence.impl;
 
+import com.tricode.checkin.model.MonthReport;
+import com.tricode.checkin.model.MonthReport_;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.model.WeekReport_;
@@ -48,6 +50,38 @@ public class UserReportRepositoryImpl extends AbstractRepository<UserReport> imp
         final QueryBuilderFactory.AdvancedQueryBuilder<Integer, WeekReport> builder = queryBuilderFactory.newBuilder(Integer.class, WeekReport.class);
         builder.where(WeekReport_.year, year);
         builder.distinct(WeekReport_.week);
+
+        return entityManager.createQuery(builder.toQuery()).getResultList();
+    }
+
+    @Override
+    public MonthReport getMonthReportByYearAndMonth(int userId, int year, int month) {
+        final QueryBuilderFactory.SimpleQueryBuilder<MonthReport> builder = queryBuilderFactory.newBuilder(MonthReport.class);
+
+        builder.and(builder.equal(MonthReport_.userId, userId),
+                builder.equal(MonthReport_.year, year),
+                builder.equal(MonthReport_.month, month));
+
+        try {
+            return entityManager.createQuery(builder.toQuery()).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Integer> findMonthReportYears() {
+        final QueryBuilderFactory.AdvancedQueryBuilder<Integer, MonthReport> builder = queryBuilderFactory.newBuilder(Integer.class, MonthReport.class);
+        builder.distinct(MonthReport_.year);
+
+        return entityManager.createQuery(builder.toQuery()).getResultList();
+    }
+
+    @Override
+    public List<Integer> findMonthReportMonths(int year) {
+        final QueryBuilderFactory.AdvancedQueryBuilder<Integer, MonthReport> builder = queryBuilderFactory.newBuilder(Integer.class, MonthReport.class);
+        builder.where(MonthReport_.year, year);
+        builder.distinct(MonthReport_.month);
 
         return entityManager.createQuery(builder.toQuery()).getResultList();
     }

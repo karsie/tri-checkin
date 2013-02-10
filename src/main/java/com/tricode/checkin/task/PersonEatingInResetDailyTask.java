@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
-public class PersonResetNightlyTask {
+public class PersonEatingInResetDailyTask {
 
     private final PersonService personService;
 
     @Autowired
-    public PersonResetNightlyTask(PersonService personService) {
+    public PersonEatingInResetDailyTask(PersonService personService) {
         this.personService = personService;
     }
 

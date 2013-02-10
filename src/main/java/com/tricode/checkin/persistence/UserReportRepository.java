@@ -1,5 +1,6 @@
 package com.tricode.checkin.persistence;
 
+import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 
@@ -14,4 +15,11 @@ public interface UserReportRepository extends Repository<UserReport> {
     List<Integer> findWeekReportYears();
 
     List<Integer> findWeekReportWeeks(int year);
+
+    MonthReport getMonthReportByYearAndMonth(int userId, int year, int month);
+
+    List<Integer> findMonthReportYears();
+
+    List<Integer> findMonthReportMonths(int year);
+
 }

@@ -33,7 +33,7 @@ public class RestReportController implements RestReportInterface {
         final Collection<WeekReport> results = new ArrayList<WeekReport>(persons.size());
 
         for (Person person : persons) {
-            results.add(reportingService.get(person.getId(), year, week));
+            results.add(reportingService.getWeek(person.getId(), year, week));
         }
 
         return results;
@@ -41,11 +41,11 @@ public class RestReportController implements RestReportInterface {
 
     @Override
     public List<Integer> listYears() {
-        return reportingService.listStoredYears();
+        return reportingService.listWeekReportYears();
     }
 
     @Override
     public List<Integer> listWeeks(@PathVariable Integer year) {
-        return reportingService.listStoredWeeks(year);
+        return reportingService.listWeekReportWeeks(year);
     }
 }
