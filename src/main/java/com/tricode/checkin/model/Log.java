@@ -1,11 +1,16 @@
 package com.tricode.checkin.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class Log {
+public abstract class Log implements Cloneable {
+
+    private static final Logger log = LoggerFactory.getLogger(Log.class);
 
     @Id
     @GeneratedValue
@@ -37,6 +42,15 @@ public abstract class Log {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Log clone() {
+        try {
+            return (Log) super.clone();
+        } catch (CloneNotSupportedException e) {
+            log.error("unable to clone log", e);
+            return null;
+        }
     }
 
     @Override

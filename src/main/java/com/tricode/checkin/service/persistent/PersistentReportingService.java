@@ -4,6 +4,7 @@ import com.tricode.checkin.event.manager.EventManager;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.persistence.UserReportRepository;
+import com.tricode.checkin.service.AbstractService;
 import com.tricode.checkin.service.ReportingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,14 @@ import java.util.List;
 
 @Service
 @Transactional
-public class PersistentReportingService implements ReportingService {
+public class PersistentReportingService extends AbstractService implements ReportingService {
 
     private final UserReportRepository weekReportRepository;
 
-    private final EventManager eventManager;
-
     @Autowired
     public PersistentReportingService(UserReportRepository weekReportRepository, EventManager eventManager) {
+        super(eventManager);
         this.weekReportRepository = weekReportRepository;
-        this.eventManager = eventManager;
     }
 
     @Override

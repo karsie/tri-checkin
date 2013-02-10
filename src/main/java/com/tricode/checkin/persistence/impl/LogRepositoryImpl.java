@@ -1,6 +1,11 @@
 package com.tricode.checkin.persistence.impl;
 
-import com.tricode.checkin.model.*;
+import com.tricode.checkin.model.LocationStatus;
+import com.tricode.checkin.model.Log;
+import com.tricode.checkin.model.Log_;
+import com.tricode.checkin.model.StatusChangeLog;
+import com.tricode.checkin.model.StatusChangeLog_;
+import com.tricode.checkin.persistence.AbstractRepository;
 import com.tricode.checkin.persistence.LogRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

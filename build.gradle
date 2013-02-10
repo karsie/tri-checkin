@@ -79,7 +79,7 @@ javascript.source {
 task hintjs(type: com.eriwen.gradle.js.tasks.JsHintTask) {
     source = javascript.source.dev.js.files
     dest = file("${buildDir}/jshint.out")
-    jshint.options = [unused:true, undef:true, trailing:true, quotmark:"double", noempty:true, newcap:true, latedef:true]
+    jshint.options = [unused:true, trailing:true, quotmark:"double", noempty:true, newcap:true, latedef:true]
 }
 
 jettyRun.doFirst {

@@ -2,6 +2,7 @@ package com.tricode.checkin.persistence.impl;
 
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.model.Person_;
+import com.tricode.checkin.persistence.AbstractRepository;
 import com.tricode.checkin.persistence.PersonRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

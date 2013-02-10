@@ -1,12 +1,11 @@
-package com.tricode.checkin.persistence.impl;
+package com.tricode.checkin.persistence;
 
 import com.tricode.checkin.persistence.Repository;
-import org.joda.time.YearMonth;
+import com.tricode.checkin.persistence.impl.QueryBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 public abstract class AbstractRepository<T> implements Repository<T> {
 

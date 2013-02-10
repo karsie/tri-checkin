@@ -6,7 +6,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
@@ -18,12 +17,7 @@ public class DefaultEventManager implements EventManager {
     @Autowired(required = false)
     private Collection<EventListener> eventListeners;
 
-    private ExecutorService executor;
-
-    @PostConstruct
-    private void init() {
-        executor = Executors.newCachedThreadPool();
-    }
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     @PreDestroy
     private void destroy() {

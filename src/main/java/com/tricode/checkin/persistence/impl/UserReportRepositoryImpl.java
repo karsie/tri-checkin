@@ -3,6 +3,7 @@ package com.tricode.checkin.persistence.impl;
 import com.tricode.checkin.model.UserReport;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.model.WeekReport_;
+import com.tricode.checkin.persistence.AbstractRepository;
 import com.tricode.checkin.persistence.UserReportRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,6 +3,7 @@ package com.tricode.checkin.service.persistent;
 import com.tricode.checkin.event.manager.EventManager;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.persistence.PersonRepository;
+import com.tricode.checkin.service.AbstractService;
 import com.tricode.checkin.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +13,14 @@ import java.util.Collection;
 
 @Service
 @Transactional
-public class PersistentPersonService implements PersonService {
+public class PersistentPersonService extends AbstractService implements PersonService {
 
     private final PersonRepository personRepository;
 
-    private final EventManager eventManager;
-
     @Autowired
     public PersistentPersonService(PersonRepository personRepository, EventManager eventManager) {
+        super(eventManager);
         this.personRepository = personRepository;
-        this.eventManager = eventManager;
     }
 
     @Override
