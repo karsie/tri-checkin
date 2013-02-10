@@ -1,11 +1,11 @@
 var WORKDAY_IN_MILLIS = 8 * 60 * 60 * 1000;
-var WORKDAYS = ['ma', 'di', 'wo', 'do', 'vr'];
+var WORKDAYS = ["ma", "di", "wo", "do", "vr"];
 var PADDING_TOP = 9;
 var PADDING_LEFT = 15;
 
 var WeekReportListView = Backbone.View.extend({
     initialize: function() {
-        this.setElement($('#' + this.id));
+        this.setElement($("#" + this.id));
         this.collection.bind("reset", this.render, this);
         this.renderFilter();
     },
@@ -15,13 +15,13 @@ var WeekReportListView = Backbone.View.extend({
     },
 
     renderOne: function(model) {
-        var report = this.options.reportDetails.find(function(reportDetail) {return reportDetail.get('userId') == model.get('id');});
+        var report = this.options.reportDetails.find(function(reportDetail) {return reportDetail.get("userId") == model.get("id");});
         var itemView = new WeekReportItemView({ model: model, report: report });
         itemView.render(this.$el);
     },
 
     renderFilter: function() {
-        var filterView = new WeekReportFilterView;
+        var filterView = new WeekReportFilterView();
         filterView.render(this);
     },
 
@@ -30,7 +30,7 @@ var WeekReportListView = Backbone.View.extend({
     },
 
     triggerFilterChange: function(year, week) {
-        if (typeof this.filterChangeHandler != 'undefined' && this.filterChangeHandler != null) {
+        if (typeof(this.filterChangeHandler) !== "undefined" && this.filterChangeHandler !== null) {
             this.filterChangeHandler(year, week);
         }
     }
@@ -40,16 +40,16 @@ var WeekReportFilterView = Backbone.View.extend({
     template: _.template('<div id="filter" class="report_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
 
     render: function(parentView) {
-        var elementId = '#filter';
-        if ($(elementId).length == 0) {
+        var elementId = "#filter";
+        if ($(elementId).length === 0) {
             parentView.$el.append(this.template());
         }
 
-        var filter_week = $('#filter_week');
+        var filter_week = $("#filter_week");
         filter_week.hide();
 
-        var select_week = $('#select_week');
-        var select_year = $('#select_year');
+        var select_week = $("#select_week");
+        var select_year = $("#select_year");
 
         select_week.change(function (event) {
             parentView.triggerFilterChange(select_year.val(), event.currentTarget.value);
@@ -57,35 +57,35 @@ var WeekReportFilterView = Backbone.View.extend({
 
         select_year.change(function (event) {
             var year = event.currentTarget.value;
-            $.getJSON('../checkin/rest/report/list/weeks/' + year, function (data) {
-                var options = select_week.prop('options');
-                $('option', select_week).remove();
+            $.getJSON("../checkin/rest/report/list/weeks/" + year, function (data) {
+                var options = select_week.prop("options");
+                $("option", select_week).remove();
 
                 filter_week.show();
-                if (data.length == 0) {
-                    options[options.length] = new Option('Nothing', -1);
+                if (data.length === 0) {
+                    options[options.length] = new Option("Nothing", -1);
                 } else {
                     _.each(data, function(week) {
                         options[options.length] = new Option(week, week);
                     });
                     select_week.val(_.max(data));
-                    select_week.trigger('change');
+                    select_week.trigger("change");
                 }
             });
         });
 
-        $.getJSON('../checkin/rest/report/list/years', function (data) {
-            var options = select_year.prop('options');
-            $('option', select_year).remove();
+        $.getJSON("../checkin/rest/report/list/years", function (data) {
+            var options = select_year.prop("options");
+            $("option", select_year).remove();
 
-            if (data.length == 0) {
-                options[options.length] = new Option('Nothing', -1);
+            if (data.length === 0) {
+                options[options.length] = new Option("Nothing", -1);
             } else {
                 _.each(data, function(year) {
                     options[options.length] = new Option(year, year);
                 });
                 select_year.val(Today.getFullYear());
-                select_year.trigger('change');
+                select_year.trigger("change");
             }
         });
     }
@@ -95,20 +95,20 @@ var WeekReportItemView = Backbone.View.extend({
     template: _.template('<div id="emp<%= id %>" class="report_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span><br/><span id="emp<%= id %>EatingIn" class="smallprint"></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70">canvas</canvas><div class="clear"></div></div>'),
 
     render: function(parent) {
-        var elementId = '#emp' + this.model.get('id');
+        var elementId = "#emp" + this.model.get("id");
         var $el = $(elementId);
-        if ($el.length == 0) {
+        if ($el.length === 0) {
             parent.append(this.template(this.model.toJSON()));
             $el = $(elementId);
         }
 
         this.setElement($el);
-        var $canvas = $(elementId + 'Canvas');
+        var $canvas = $(elementId + "Canvas");
         this.drawTooltip($canvas);
 
-        this.updateEatingIn($(elementId + "EatingIn"), this.options.report.get('eatingIn'));
+        this.updateEatingIn($(elementId + "EatingIn"), this.options.report.get("eatingIn"));
 
-        var days = this.options.report.get('days');
+        var days = this.options.report.get("days");
         var maxMillis = _.max(days);
         if (maxMillis < WORKDAY_IN_MILLIS) {
             maxMillis = WORKDAY_IN_MILLIS;
@@ -134,73 +134,73 @@ var WeekReportItemView = Backbone.View.extend({
     },
 
     drawLine: function(canvas, points) {
-        if (typeof(canvas.getLayer('line')) === 'undefined') {
+        if (typeof(canvas.getLayer("line")) === "undefined") {
             canvas.drawLine({
                 layer: true,
-                name: 'line',
-                strokeStyle: '#f00',
+                name: "line",
+                strokeStyle: "#f00",
                 strokeWidth: 2
             });
         }
         var coords = {};
         _.each(points, function(point) {
-            coords['x' + point.id] = PADDING_LEFT + point.x;
-            coords['y' + point.id] = PADDING_TOP + point.y;
+            coords["x" + point.id] = PADDING_LEFT + point.x;
+            coords["y" + point.id] = PADDING_TOP + point.y;
         });
-        canvas.setLayer('line', coords);
+        canvas.setLayer("line", coords);
     },
 
     drawArcs: function(canvas, points) {
-        if (typeof(canvas.getLayer('p1')) === 'undefined') {
+        if (typeof(canvas.getLayer("p1")) === "undefined") {
             _.each(points, function(point) {
                 canvas.drawArc({
                     layer: true,
-                    name: 'ph' + point.id,
-                    fillStyle: '#fff',
-                    strokeStyle: '#333',
+                    name: "ph" + point.id,
+                    fillStyle: "#fff",
+                    strokeStyle: "#333",
                     strokeWidth: 2,
                     radius: 7,
                     start: 0.1, end: 360
                 });
                 canvas.drawArc({
                     layer: true,
-                    name: 'p' + point.id,
+                    name: "p" + point.id,
                     pid: point.id,
-                    fillStyle: '#f00',
-                    strokeStyle: '#f00',
+                    fillStyle: "#f00",
+                    strokeStyle: "#f00",
                     strokeWidth: 2,
                     radius: 4,
                     start: 0.1, end: 360,
                     mouseover: function(layer) {
-                        canvas.setLayer('ph' + layer.pid, { visible: true });
+                        canvas.setLayer("ph" + layer.pid, { visible: true });
 
                         var ttX = layer.eventX - 25;
                         if (ttX < PADDING_LEFT) {
                             ttX = PADDING_LEFT;
                         }
-                        var ttY = layer.eventY - canvas.getLayer('tooltip').height - 15;
+                        var ttY = layer.eventY - canvas.getLayer("tooltip").height - 15;
                         if (ttY < PADDING_TOP) { // move it below
                             ttY = layer.eventY + 20;
                         }
 
-                        canvas.setLayer('tooltip', {visible: true, x: ttX, y: ttY});
-                        canvas.setLayer('tooltipText', {visible: true, text: layer.tooltip, x: ttX + 5, y: ttY + 2});
+                        canvas.setLayer("tooltip", {visible: true, x: ttX, y: ttY});
+                        canvas.setLayer("tooltipText", {visible: true, text: layer.tooltip, x: ttX + 5, y: ttY + 2});
                     },
                     mouseout: function(layer) {
-                        canvas.setLayer('ph' + layer.pid, { visible: false });
-                        canvas.setLayer('tooltip', {visible: false});
-                        canvas.setLayer('tooltipText', {visible: false});
+                        canvas.setLayer("ph" + layer.pid, { visible: false });
+                        canvas.setLayer("tooltip", {visible: false});
+                        canvas.setLayer("tooltipText", {visible: false});
                     }
                 });
             });
         }
         _.each(points, function(point) {
-            canvas.setLayer('ph' + point.id, {
+            canvas.setLayer("ph" + point.id, {
                 visible: false,
                 x: PADDING_LEFT + point.x,
                 y: PADDING_TOP + point.y
             });
-            canvas.setLayer('p' + point.id, {
+            canvas.setLayer("p" + point.id, {
                 x: PADDING_LEFT + point.x,
                 y: PADDING_TOP + point.y,
                 tooltip: point.time
@@ -209,12 +209,12 @@ var WeekReportItemView = Backbone.View.extend({
     },
 
     drawTooltip: function(canvas) {
-        if (typeof(canvas.getLayer('tooltip')) === 'undefined') {
+        if (typeof(canvas.getLayer("tooltip")) === "undefined") {
             canvas.drawRect({
                 layer: true,
-                name: 'tooltip',
-                fillStyle: '#ff7',
-                strokeStyle: '#000',
+                name: "tooltip",
+                fillStyle: "#ff7",
+                strokeStyle: "#000",
                 strokeWidth: 1,
                 x: 10, y: 11,
                 width: 50, height: 17,
@@ -223,7 +223,7 @@ var WeekReportItemView = Backbone.View.extend({
             });
             canvas.drawText({
                 layer: true,
-                name: 'tooltipText',
+                name: "tooltipText",
                 fillStyle: "#000",
                 x: 10, y: 11,
                 font: "10pt Arial, sans-serif",
@@ -231,8 +231,8 @@ var WeekReportItemView = Backbone.View.extend({
                 fromCenter: false
             });
         }
-        canvas.setLayer('tooltip', {visible:false});
-        canvas.setLayer('tooltipText', {visible:false});
+        canvas.setLayer("tooltip", {visible:false});
+        canvas.setLayer("tooltipText", {visible:false});
     },
 
     updateEatingIn: function (spanElement, days) {
@@ -243,9 +243,9 @@ var WeekReportItemView = Backbone.View.extend({
             }
         });
         if (daysEatingIn.length > 0) {
-            spanElement.html('Meegegeten op: ' + daysEatingIn.join('-'));
+            spanElement.html("Meegegeten op: " + daysEatingIn.join("-"));
         } else {
-            spanElement.html('');
+            spanElement.html("");
         }
     },
 
