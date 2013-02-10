@@ -41,10 +41,8 @@ var WeekReportFilterView = Backbone.View.extend({
 
     render: function(parentView) {
         var elementId = '#filter';
-        var $el = $(elementId);
-        if ($el.length == 0) {
+        if ($(elementId).length == 0) {
             parentView.$el.append(this.template());
-            $el = $(elementId);
         }
 
         var filter_week = $('#filter_week');
@@ -136,92 +134,105 @@ var WeekReportItemView = Backbone.View.extend({
     },
 
     drawLine: function(canvas, points) {
-        var line = {
-            layer: true,
-            name: 'line',
-            strokeStyle: '#f00',
-            strokeWidth: 2
-        };
+        if (typeof(canvas.getLayer('line')) === 'undefined') {
+            canvas.drawLine({
+                layer: true,
+                name: 'line',
+                strokeStyle: '#f00',
+                strokeWidth: 2
+            });
+        }
+        var coords = {};
         _.each(points, function(point) {
-            line['x' + point.id] = PADDING_LEFT + point.x;
-            line['y' + point.id] = PADDING_TOP + point.y;
+            coords['x' + point.id] = PADDING_LEFT + point.x;
+            coords['y' + point.id] = PADDING_TOP + point.y;
         });
-        canvas.drawLine(line);
+        canvas.setLayer('line', coords);
     },
 
     drawArcs: function(canvas, points) {
-        _.each(points, function(point) {
-            canvas.drawArc({
-                layer: true,
-                name: 'ph' + point.id,
-                visible: false,
-                fillStyle: '#fff',
-                strokeStyle: '#333',
-                strokeWidth: 2,
-                x: PADDING_LEFT + point.x,
-                y: PADDING_TOP + point.y,
-                radius: 7,
-                start: 0.1, end: 360
+        if (typeof(canvas.getLayer('p1')) === 'undefined') {
+            _.each(points, function(point) {
+                canvas.drawArc({
+                    layer: true,
+                    name: 'ph' + point.id,
+                    fillStyle: '#fff',
+                    strokeStyle: '#333',
+                    strokeWidth: 2,
+                    radius: 7,
+                    start: 0.1, end: 360
+                });
+                canvas.drawArc({
+                    layer: true,
+                    name: 'p' + point.id,
+                    pid: point.id,
+                    fillStyle: '#f00',
+                    strokeStyle: '#f00',
+                    strokeWidth: 2,
+                    radius: 4,
+                    start: 0.1, end: 360,
+                    mouseover: function(layer) {
+                        canvas.setLayer('ph' + layer.pid, { visible: true });
+
+                        var ttX = layer.eventX - 25;
+                        if (ttX < PADDING_LEFT) {
+                            ttX = PADDING_LEFT;
+                        }
+                        var ttY = layer.eventY - canvas.getLayer('tooltip').height - 15;
+                        if (ttY < PADDING_TOP) { // move it below
+                            ttY = layer.eventY + 20;
+                        }
+
+                        canvas.setLayer('tooltip', {visible: true, x: ttX, y: ttY});
+                        canvas.setLayer('tooltipText', {visible: true, text: layer.tooltip, x: ttX + 5, y: ttY + 2});
+                    },
+                    mouseout: function(layer) {
+                        canvas.setLayer('ph' + layer.pid, { visible: false });
+                        canvas.setLayer('tooltip', {visible: false});
+                        canvas.setLayer('tooltipText', {visible: false});
+                    }
+                });
             });
-            canvas.drawArc({
-                layer: true,
-                name: 'p' + point.id,
-                pid: point.id,
-                fillStyle: '#f00',
-                strokeStyle: '#f00',
-                strokeWidth: 2,
+        }
+        _.each(points, function(point) {
+            canvas.setLayer('ph' + point.id, {
+                visible: false,
+                x: PADDING_LEFT + point.x,
+                y: PADDING_TOP + point.y
+            });
+            canvas.setLayer('p' + point.id, {
                 x: PADDING_LEFT + point.x,
                 y: PADDING_TOP + point.y,
-                radius: 4,
-                start: 0.1, end: 360,
-                tooltip: point.time,
-                mouseover: function(layer) {
-                    canvas.setLayer('ph' + layer.pid, { visible: true });
-
-                    var ttX = layer.eventX - 25;
-                    if (ttX < PADDING_LEFT) {
-                        ttX = PADDING_LEFT;
-                    }
-                    var ttY = layer.eventY - canvas.getLayer('tooltip').height - 15;
-                    if (ttY < PADDING_TOP) { // move it below
-                        ttY = layer.eventY + 20;
-                    }
-
-                    canvas.setLayer('tooltip', {visible: true, x: ttX, y: ttY});
-                    canvas.setLayer('tooltipText', {visible: true, text: layer.tooltip, x: ttX + 5, y: ttY + 2});
-                },
-                mouseout: function(layer) {
-                    canvas.setLayer('ph' + layer.pid, { visible: false });
-                    canvas.setLayer('tooltip', {visible: false});
-                    canvas.setLayer('tooltipText', {visible: false});
-                }
+                tooltip: point.time
             });
         });
     },
 
     drawTooltip: function(canvas) {
-        canvas.drawRect({
-            layer: true,
-            name: 'tooltip',
-            fillStyle: '#ff7',
-            strokeStyle: '#000',
-            visible: false,
-            strokeWidth: 1,
-            x: 10, y: 11,
-            width: 50, height: 17,
-            fromCenter: false,
-            cornerRadius: 0
-        });
-        canvas.drawText({
-            layer: true,
-            name: 'tooltipText',
-            visible: false,
-            fillStyle: "#000",
-            x: 10, y: 11,
-            font: "10pt Arial, sans-serif",
-            text: "Hello",
-            fromCenter: false
-        });
+        if (typeof(canvas.getLayer('tooltip')) === 'undefined') {
+            canvas.drawRect({
+                layer: true,
+                name: 'tooltip',
+                fillStyle: '#ff7',
+                strokeStyle: '#000',
+                strokeWidth: 1,
+                x: 10, y: 11,
+                width: 50, height: 17,
+                fromCenter: false,
+                cornerRadius: 0
+            });
+            canvas.drawText({
+                layer: true,
+                name: 'tooltipText',
+                fillStyle: "#000",
+                x: 10, y: 11,
+                font: "10pt Arial, sans-serif",
+                text: "",
+                fromCenter: false
+            });
+        }
+        canvas.setLayer('tooltip', {visible:false});
+        canvas.setLayer('tooltipText', {visible:false});
     },
 
     updateEatingIn: function (spanElement, days) {

@@ -22,6 +22,7 @@ public class InMemoryTestPersonsLoader {
             if (!personsField.isAccessible()) {
                 personsField.setAccessible(true);
             }
+            //noinspection unchecked
             final Map<Integer, Person> personsMap = (Map<Integer, Person>) ReflectionUtils.getField(personsField, personService);
 
             personsMap.put(1, Person.Builder.withId(1).withFirstName("Amployee").withLastName("1").get());
