@@ -6,3 +6,4 @@ classes/
 Data.local.xml
 checkin.local.properties
 .gradle
+.idea
