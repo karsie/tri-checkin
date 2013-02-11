@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
-public class PersonEatingInResetDailyTask {
+public class PersonEatingInResetDailyTask implements RunnableTask {
 
     private final PersonService personService;
 
@@ -18,6 +18,7 @@ public class PersonEatingInResetDailyTask {
         this.personService = personService;
     }
 
+    @Override
     @Scheduled(cron = "0 0 1 * * ?")
     public void runTask() {
         final Collection<Person> persons = personService.list();
@@ -27,5 +28,15 @@ public class PersonEatingInResetDailyTask {
                 personService.save(person);
             }
         }
+    }
+
+    @Override
+    public String schedule() {
+        return "Every day, at 01:00";
+    }
+
+    @Override
+    public String description() {
+        return "Resets the 'eating-in' flag for every person";
     }
 }

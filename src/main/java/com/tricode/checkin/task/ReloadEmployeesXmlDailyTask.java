@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ReloadEmployeesXmlDailyTask {
+public class ReloadEmployeesXmlDailyTask implements RunnableTask {
 
     private static final Logger log = LoggerFactory.getLogger(ReloadEmployeesXmlDailyTask.class);
 
@@ -47,6 +47,7 @@ public class ReloadEmployeesXmlDailyTask {
         }
     }
 
+    @Override
     @Scheduled(cron = "0 0 3 * * ?")
     @PostConstruct
     public void runTask() {
@@ -58,6 +59,16 @@ public class ReloadEmployeesXmlDailyTask {
                 reSchedule();
             }
         }
+    }
+
+    @Override
+    public String schedule() {
+        return "At startup and every day, at 03:00";
+    }
+
+    @Override
+    public String description() {
+        return "Reads checkin.xml.file and adds/updates personal info";
     }
 
     private void importXmlEmployeeFiles() throws JAXBException {
