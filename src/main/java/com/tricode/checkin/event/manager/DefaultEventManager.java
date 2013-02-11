@@ -19,6 +19,12 @@ public class DefaultEventManager implements EventManager {
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
+    private static final ThreadLocal<Boolean> threadRunState = new ThreadLocal<Boolean>();
+
+    public DefaultEventManager() {
+        threadRunState.set(Boolean.TRUE);
+    }
+
     @PreDestroy
     private void destroy() {
         executor.shutdown();
@@ -39,9 +45,21 @@ public class DefaultEventManager implements EventManager {
         doRaiseEvent(new EventListenerRunner<T>(eventObject, null, EventType.DELETE));
     }
 
+    @Override
+    public void stopForCurrentThread() {
+        threadRunState.set(Boolean.FALSE);
+    }
+
+    @Override
+    public void startForCurrentThread() {
+        threadRunState.set(Boolean.TRUE);
+    }
+
     private <T> void doRaiseEvent(EventListenerRunner<T> runner) {
-        if (eventListeners != null) {
-            executor.execute(new EventListenersStarter<T>(eventListeners, executor, runner));
+        if (threadRunState.get()) {
+            if (eventListeners != null) {
+                executor.execute(new EventListenersStarter<T>(eventListeners, executor, runner));
+            }
         }
     }
 

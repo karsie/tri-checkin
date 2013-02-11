@@ -8,4 +8,7 @@ public interface EventManager {
 
     <T> void raiseDeleteEvent(T eventObject);
 
+    void stopForCurrentThread();
+
+    void startForCurrentThread();
 }
