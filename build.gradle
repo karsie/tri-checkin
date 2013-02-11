@@ -83,6 +83,6 @@ task hintjs(type: com.eriwen.gradle.js.tasks.JsHintTask) {
 }
 
 jettyRun.doFirst {
-    System.setProperty('xmlDataFile', 'Data.xml')
+    System.setProperty('xmlDataFile', 'Data.local.xml,Data.xml')
 }
 
