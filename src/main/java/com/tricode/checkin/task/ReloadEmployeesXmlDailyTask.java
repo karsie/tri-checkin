@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class ReloadEmployeesXmlDailyTask implements RunnableTask {
@@ -32,6 +35,12 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
     private final CheckinConfig checkinConfig;
     private final PersonService personService;
     private Unmarshaller unmarshaller;
+
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private static final long TEN_MINUTES = 10 * 60 * 1000L;
+    private volatile int failureCount = 0;
+    private volatile long lastFailure = 0L;
 
     @Autowired
     public ReloadEmployeesXmlDailyTask(CheckinConfig checkinConfig, PersonService personService) {
@@ -55,10 +64,17 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
             try {
                 importXmlEmployeeFiles();
             } catch (JAXBException e) {
-                log.error("error parsing xml file", e);
-                reSchedule();
+                log.error("error parsing xml file (" + failureCount + ")", e);
+                if (shouldReschedule()) {
+                    reSchedule();
+                }
             }
         }
+    }
+
+    @PreDestroy
+    private void destroy() {
+        executorService.shutdown();
     }
 
     @Override
@@ -73,8 +89,10 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
 
     private void importXmlEmployeeFiles() throws JAXBException {
         final String[] xmlFilePaths = StringUtils.split(checkinConfig.getXmlFile(), ',');
-        for (String xmlFilePath : xmlFilePaths) {
-            if (importXmlFile(xmlFilePath, XmlEmployees.class)) break;
+        if (xmlFilePaths != null) {
+            for (String xmlFilePath : xmlFilePaths) {
+                if (importXmlFile(xmlFilePath, XmlEmployees.class)) break;
+            }
         }
     }
 
@@ -126,11 +144,13 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
             }
 
             final String[] name = StringUtils.split(employee.getName(), ' ');
-            if (name.length > 0) {
-                person.setFirst(name[0]);
+            if (name != null) {
+                if (name.length > 0) {
+                    person.setFirst(name[0]);
 
-                if (name.length > 1) {
-                    person.setLast(parseLastName(name));
+                    if (name.length > 1) {
+                        person.setLast(parseLastName(name));
+                    }
                 }
             }
             final Person saved = personService.save(person);
@@ -159,9 +179,27 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
         return lastName;
     }
 
+    private boolean shouldReschedule() {
+        final long currentTime = System.currentTimeMillis();
+        if ((currentTime - lastFailure) < TEN_MINUTES) {
+            // failed again in less than 10 minutes
+            lastFailure = currentTime;
+            failureCount++;
+            if (failureCount < 3) {
+                // less than 3 times? try again
+                return true;
+            }
+        } else {
+            // First failure since more than 10 minutes ago, start at 1
+            lastFailure = currentTime;
+            failureCount = 1;
+            return true;
+        }
+        return false;
+    }
 
     private void reSchedule() {
-        new Thread(new Runnable() {
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
                 runTask();

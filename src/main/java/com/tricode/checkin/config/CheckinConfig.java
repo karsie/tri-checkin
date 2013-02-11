@@ -27,8 +27,16 @@ public class CheckinConfig {
         return xmlFile;
     }
 
+    protected void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
+    }
+
     public String getXmlFileEncoding() {
         return xmlFileEncoding;
+    }
+
+    protected void setXmlFileEncoding(String xmlFileEncoding) {
+        this.xmlFileEncoding = xmlFileEncoding;
     }
 
     @PostConstruct

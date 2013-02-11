@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<employees>
+  <employee name="Amployee 1" afasId="001" status="in" />
+  <employee name="Bmployee 2" afasId="002" status="in" startDate="2013-01-01" />
+  <employee name="Cmployee 3" afasId="003" status="in" />
+  <employee name="Dmployee of 5" afasId="005" status="out" />
+  <employee name="Employee La 6" afasId="006" status="out" />
+  <employee name="" afasId="007" status="in" />
+  <employee name="Gmployee 9" afasId="009" status="out" birthDate="1985-01-05" />
+  <employee name="Hmployee" afasId="010" status="out" />
+</employees>
