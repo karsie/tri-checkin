@@ -12,6 +12,10 @@ import java.util.Collection;
 @Component
 public class PersonEatingInResetDailyTask implements RunnableTask {
 
+    private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(PersonEatingInResetDailyTask.class,
+                "Resets the 'eating-in' flag for every person",
+                "Every day, at 01:00");
+
     private final PersonService personService;
     private final EventManager eventManager;
 
@@ -36,12 +40,7 @@ public class PersonEatingInResetDailyTask implements RunnableTask {
     }
 
     @Override
-    public String schedule() {
-        return "Every day, at 01:00";
-    }
-
-    @Override
-    public String description() {
-        return "Resets the 'eating-in' flag for every person";
+    public RunnableTaskMetadata metadata() {
+        return METADATA;
     }
 }

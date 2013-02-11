@@ -14,4 +14,8 @@ public class PageController {
     @RequestMapping("report")
     public void report() {
     }
+
+    @RequestMapping("tasks")
+    public void tasks() {
+    }
 }

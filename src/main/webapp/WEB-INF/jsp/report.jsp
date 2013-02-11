@@ -7,6 +7,6 @@
     <script type="text/javascript" data-main="${pageContext.request.contextPath}/js/tri-cz3ck-report-load.js" src="${pageContext.request.contextPath}/js/libs/require-min.js"></script>
 </head>
 <body>
-    <div id="report" class="report_container"></div>
+    <div id="report" class="centered_container"></div>
 </body>
 </html>

@@ -48,7 +48,7 @@ body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
 .report_filter_item span { margin-top: 1px; }
 .report_filter_item select { float: right; }
 
-.report_container .report_header {
+.centered_container .centered_header {
     position: relative;
     left: 20%;
     width: 60%;
@@ -59,7 +59,7 @@ body, div { font-family: Calibri, sans-serif !important; font-size: 12pt; }
     margin-bottom: 2px;
 }
 
-.report_container .report_item {
+.centered_container .centered_item {
     position: relative;
     left: 20%;
     width: 60%;

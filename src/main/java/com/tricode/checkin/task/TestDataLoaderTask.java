@@ -14,6 +14,8 @@ public class TestDataLoaderTask implements RunnableTask {
 
     private static final Logger log = LoggerFactory.getLogger(TestDataLoaderTask.class);
 
+    private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(TestDataLoaderTask.class, "Loads test data", "On demand");
+
     private ReportingService reportingService;
 
     @Autowired
@@ -27,12 +29,7 @@ public class TestDataLoaderTask implements RunnableTask {
     }
 
     @Override
-    public String schedule() {
-        return "On demand";
-    }
-
-    @Override
-    public String description() {
-        return "Loads test data";
+    public RunnableTaskMetadata metadata() {
+        return METADATA;
     }
 }

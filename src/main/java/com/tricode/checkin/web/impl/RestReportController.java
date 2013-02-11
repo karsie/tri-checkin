@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Controller
 public class RestReportController implements RestReportInterface {
@@ -40,12 +39,12 @@ public class RestReportController implements RestReportInterface {
     }
 
     @Override
-    public List<Integer> listYears() {
+    public Collection<Integer> listYears() {
         return reportingService.listWeekReportYears();
     }
 
     @Override
-    public List<Integer> listWeeks(@PathVariable Integer year) {
+    public Collection<Integer> listWeeks(@PathVariable Integer year) {
         return reportingService.listWeekReportWeeks(year);
     }
 }

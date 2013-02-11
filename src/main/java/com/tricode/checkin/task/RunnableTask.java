@@ -4,7 +4,5 @@ public interface RunnableTask {
 
     void runTask();
 
-    String schedule();
-
-    String description();
+    RunnableTaskMetadata metadata();
 }

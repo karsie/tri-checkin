@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collection;
-import java.util.List;
 
 @RequestMapping("rest/report")
 public interface RestReportInterface {
@@ -19,9 +18,9 @@ public interface RestReportInterface {
 
     @RequestMapping(value = "list/years", method = RequestMethod.GET)
     @ResponseBody
-    List<Integer> listYears();
+    Collection<Integer> listYears();
 
     @RequestMapping(value = "list/weeks/{year}", method = RequestMethod.GET)
     @ResponseBody
-    List<Integer> listWeeks(@PathVariable Integer year);
+    Collection<Integer> listWeeks(@PathVariable Integer year);
 }

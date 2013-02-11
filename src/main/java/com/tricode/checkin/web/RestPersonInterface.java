@@ -14,13 +14,13 @@ public interface RestPersonInterface {
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    Collection<Person> getPersons();
+    Collection<Person> list();
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
-    Person getPerson(@PathVariable Integer id);
+    Person get(@PathVariable Integer id);
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
-    Person updatePerson(@PathVariable Integer id, @RequestBody Person person);
+    Person update(@PathVariable Integer id, @RequestBody Person person);
 }

@@ -22,19 +22,19 @@ public class RestPersonController implements RestPersonInterface {
     }
 
     @Override
-    public Collection<Person> getPersons() {
+    public Collection<Person> list() {
         return personService.list();
     }
 
     @Override
-    public Person getPerson(@PathVariable Integer id) {
+    public Person get(@PathVariable Integer id) {
         Assert.notNull(id, "Parameter 'id' can not be empty");
 
         return personService.get(id);
     }
 
     @Override
-    public Person updatePerson(@PathVariable Integer id, @RequestBody Person person) {
+    public Person update(@PathVariable Integer id, @RequestBody Person person) {
         Assert.notNull(id, "Parameter 'id' can not be empty");
         Assert.notNull(person, "Parameter 'person' can not be empty");
 

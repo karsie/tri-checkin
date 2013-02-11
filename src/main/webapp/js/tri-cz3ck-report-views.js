@@ -37,7 +37,7 @@ var WeekReportListView = Backbone.View.extend({
 });
 
 var WeekReportFilterView = Backbone.View.extend({
-    template: _.template('<div id="filter" class="report_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
+    template: _.template('<div id="filter" class="centered_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
 
     render: function(parentView) {
         var elementId = "#filter";
@@ -92,7 +92,7 @@ var WeekReportFilterView = Backbone.View.extend({
 });
 
 var WeekReportItemView = Backbone.View.extend({
-    template: _.template('<div id="emp<%= id %>" class="report_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span><br/><span id="emp<%= id %>EatingIn" class="smallprint"></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70">canvas</canvas><div class="clear"></div></div>'),
+    template: _.template('<div id="emp<%= id %>" class="centered_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span><br/><span id="emp<%= id %>EatingIn" class="smallprint"></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70">canvas</canvas><div class="clear"></div></div>'),
 
     render: function(parent) {
         var elementId = "#emp" + this.model.get("id");

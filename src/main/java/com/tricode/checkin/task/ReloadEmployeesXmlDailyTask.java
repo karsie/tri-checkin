@@ -32,6 +32,10 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
 
     private static final Logger log = LoggerFactory.getLogger(ReloadEmployeesXmlDailyTask.class);
 
+    private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(ReloadEmployeesXmlDailyTask.class,
+            "Reads ${checkin.xml.file} and adds/updates personal info",
+            "At startup and every day, at 03:00");
+
     private final CheckinConfig checkinConfig;
     private final PersonService personService;
     private Unmarshaller unmarshaller;
@@ -72,19 +76,14 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
         }
     }
 
+    @Override
+    public RunnableTaskMetadata metadata() {
+        return METADATA;
+    }
+
     @PreDestroy
     private void destroy() {
         executorService.shutdown();
-    }
-
-    @Override
-    public String schedule() {
-        return "At startup and every day, at 03:00";
-    }
-
-    @Override
-    public String description() {
-        return "Reads checkin.xml.file and adds/updates personal info";
     }
 
     private void importXmlEmployeeFiles() throws JAXBException {
