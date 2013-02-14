@@ -16,4 +16,5 @@ public interface LogService {
 
     StatusChangeLog getLastStatusChangeForUser(int userId, LocationStatus status);
 
+    Collection<Log> list();
 }

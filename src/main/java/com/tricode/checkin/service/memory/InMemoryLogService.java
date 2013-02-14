@@ -75,6 +75,11 @@ public class InMemoryLogService implements LogService {
         return result;
     }
 
+    @Override
+    public Collection<Log> list() {
+        return data.values();
+    }
+
     private static String toId(int userId, long timestamp) {
         return userId + "-" + timestamp;
     }

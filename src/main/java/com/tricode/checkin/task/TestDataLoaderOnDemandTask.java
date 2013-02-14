@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
  * This class is used to load dummy test data to simulate a live data set. Must not be used in production!.
  */
 @Component
-public class TestDataLoaderTask implements RunnableTask {
+public class TestDataLoaderOnDemandTask implements RunnableTask {
 
-    private static final Logger log = LoggerFactory.getLogger(TestDataLoaderTask.class);
+    private static final Logger log = LoggerFactory.getLogger(TestDataLoaderOnDemandTask.class);
 
-    private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(TestDataLoaderTask.class, "Loads test data", "On demand");
+    private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(TestDataLoaderOnDemandTask.class, "Loads test data", "On demand");
 
     private ReportingService reportingService;
 
     @Autowired
-    public TestDataLoaderTask(ReportingService reportingService) {
+    public TestDataLoaderOnDemandTask(ReportingService reportingService) {
         this.reportingService = reportingService;
     }
 

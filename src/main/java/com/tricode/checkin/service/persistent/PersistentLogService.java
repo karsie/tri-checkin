@@ -45,4 +45,9 @@ public class PersistentLogService extends AbstractService implements LogService 
     public StatusChangeLog getLastStatusChangeForUser(int userId, LocationStatus status) {
         return logRepository.getLastChangeByUserIdAndStatus(userId, status);
     }
+
+    @Override
+    public Collection<Log> list() {
+        return logRepository.findAll();
+    }
 }

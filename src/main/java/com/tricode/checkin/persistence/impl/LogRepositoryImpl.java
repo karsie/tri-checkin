@@ -60,4 +60,9 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
             return null;
         }
     }
+
+    @Override
+    public Collection<Log> findAll() {
+        return entityManager.createQuery(queryBuilderFactory.newBuilder(Log.class).orderBy(Log_.id, true).toQuery()).getResultList();
+    }
 }
