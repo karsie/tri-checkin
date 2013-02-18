@@ -78,6 +78,14 @@ public class QueryBuilderFactory {
             return criteriaBuilder.equal(root.get(attribute), value);
         }
 
+        public <Y extends Comparable<? super Y>> Predicate lessThan(SingularAttribute<? super F, Y> attribute, Y value) {
+            return criteriaBuilder.lessThan(root.get(attribute), value);
+        }
+
+        public <Y extends Comparable<? super Y>> Predicate greaterThan(SingularAttribute<? super F, Y> attribute, Y value) {
+            return criteriaBuilder.greaterThan(root.get(attribute), value);
+        }
+
         public <Y extends Comparable<? super Y>> Predicate between(SingularAttribute<? super F, Y> attribute, Y valueX, Y valueY) {
             return criteriaBuilder.between(root.get(attribute), valueX, valueY);
         }

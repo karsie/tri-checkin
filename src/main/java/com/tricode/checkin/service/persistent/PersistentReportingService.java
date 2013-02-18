@@ -81,4 +81,10 @@ public class PersistentReportingService extends AbstractService implements Repor
     public List<Integer> listMonthReportMonths(int year) {
         return userReportRepository.findMonthReportMonths(year);
     }
+
+    @Override
+    public void clear() {
+        userReportRepository.clearAll(WeekReport.class);
+        userReportRepository.clearAll(MonthReport.class);
+    }
 }

@@ -3,6 +3,7 @@ package com.tricode.checkin.persistence.impl;
 import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.MonthReport_;
 import com.tricode.checkin.model.UserReport;
+import com.tricode.checkin.model.UserReport_;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.model.WeekReport_;
 import com.tricode.checkin.persistence.AbstractRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.metamodel.EntityType;
 import java.util.List;
 
 @Repository
@@ -84,5 +87,14 @@ public class UserReportRepositoryImpl extends AbstractRepository<UserReport> imp
         builder.distinct(MonthReport_.month);
 
         return entityManager.createQuery(builder.toQuery()).getResultList();
+    }
+
+    @Override
+    public <T extends UserReport> void clearAll(Class<T> userReportClass) {
+        final CriteriaQuery<T> query = queryBuilderFactory.newBuilder(userReportClass).orderBy(UserReport_.id, true).toQuery();
+
+        for (T userReport : entityManager.createQuery(query).getResultList()) {
+            entityManager.remove(userReport);
+        }
     }
 }

@@ -59,13 +59,16 @@ public class InMemoryLogService implements LogService {
     }
 
     @Override
-    public StatusChangeLog getLastStatusChangeForUser(int userId, LocationStatus status) {
+    public StatusChangeLog getPreviousStatusChangeForUser(int userId, LocationStatus status, long timestamp) {
         long latest = 0;
         StatusChangeLog result = null;
         for (Log log : data.values()) {
             if (log instanceof StatusChangeLog) {
                 final StatusChangeLog scl = (StatusChangeLog) log;
                 if (scl.getUserId() == userId && scl.getStatusTo() == status && scl.getTimestamp() > latest) {
+                    if (latest > scl.getTimestamp()) {
+                        break;
+                    }
                     latest = scl.getTimestamp();
                     result = scl;
                 }

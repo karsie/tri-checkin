@@ -21,4 +21,6 @@ public interface ReportingService {
     List<Integer> listMonthReportYears();
 
     List<Integer> listMonthReportMonths(int year);
+
+    void clear();
 }

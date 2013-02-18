@@ -37,10 +37,10 @@ public class StatusChangeLogCreateListener implements EventListener<StatusChange
             int dayIndex = signOutTime.getDayOfWeek() - 1; // MONDAY = 1, so index = 0
 
             if (dayIndex >= 0 && dayIndex < 5) {
-                final StatusChangeLog lastStatus = logService.getLastStatusChangeForUser(objectAfter.getUserId(), LocationStatus.IN);
+                final StatusChangeLog previousStatus = logService.getPreviousStatusChangeForUser(objectAfter.getUserId(), LocationStatus.IN, objectAfter.getTimestamp());
                 final WeekReport weekReport = reportingService.getWeek(objectAfter.getUserId(), signOutTime.getWeekyear(), signOutTime.getWeekOfWeekyear());
 
-                Duration signedInFor = new Duration(lastStatus.getTimestamp(), objectAfter.getTimestamp());
+                Duration signedInFor = new Duration(previousStatus.getTimestamp(), objectAfter.getTimestamp());
                 signedInFor = signedInFor.plus(weekReport.getDays().get(dayIndex));
 
                 weekReport.getDays().set(dayIndex, signedInFor.getMillis());

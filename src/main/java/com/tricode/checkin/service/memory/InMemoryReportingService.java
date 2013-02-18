@@ -70,6 +70,11 @@ public class InMemoryReportingService implements ReportingService {
         throw new NotImplementedException();
     }
 
+    @Override
+    public void clear() {
+        data.clear();
+    }
+
     private static String toId(int userId, int year, int week) {
         return userId + "-" + year + "-" + week;
     }

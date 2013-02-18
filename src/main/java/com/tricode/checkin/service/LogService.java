@@ -14,7 +14,7 @@ public interface LogService {
 
     Collection<StatusChangeLog> listStatusChangesForUser(int userId, long timestampFrom, long timestampTo);
 
-    StatusChangeLog getLastStatusChangeForUser(int userId, LocationStatus status);
+    StatusChangeLog getPreviousStatusChangeForUser(int userId, LocationStatus status, long timestamp);
 
     Collection<Log> list();
 }

@@ -1,6 +1,7 @@
 package com.tricode.checkin.service.persistent;
 
 import com.tricode.checkin.event.manager.EventManager;
+import com.tricode.checkin.model.EatingInLog;
 import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Log;
 import com.tricode.checkin.model.StatusChangeLog;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -42,12 +44,17 @@ public class PersistentLogService extends AbstractService implements LogService 
     }
 
     @Override
-    public StatusChangeLog getLastStatusChangeForUser(int userId, LocationStatus status) {
-        return logRepository.getLastChangeByUserIdAndStatus(userId, status);
+    public StatusChangeLog getPreviousStatusChangeForUser(int userId, LocationStatus status, long timestamp) {
+        return logRepository.getPreviousChangeByUserIdAndStatusFromTimestamp(userId, status, timestamp);
     }
 
     @Override
     public Collection<Log> list() {
-        return logRepository.findAll();
+        final Collection<Log> result = new ArrayList<Log>();
+
+        result.addAll(logRepository.findAll(StatusChangeLog.class));
+        result.addAll(logRepository.findAll(EatingInLog.class));
+
+        return result;
     }
 }

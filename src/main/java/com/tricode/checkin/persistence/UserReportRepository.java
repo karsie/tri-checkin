@@ -22,4 +22,5 @@ public interface UserReportRepository extends Repository<UserReport> {
 
     List<Integer> findMonthReportMonths(int year);
 
+    <T extends UserReport> void clearAll(Class<T> userReportClass);
 }

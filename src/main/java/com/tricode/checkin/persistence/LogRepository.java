@@ -16,7 +16,7 @@ public interface LogRepository extends Repository<Log> {
 
     Collection<Log> findByUserIdAndTimeRange(int userId, long timestampFrom, long timestampTo);
 
-    StatusChangeLog getLastChangeByUserIdAndStatus(int userId, LocationStatus status);
+    StatusChangeLog getPreviousChangeByUserIdAndStatusFromTimestamp(int userId, LocationStatus status, long timestamp);
 
-    Collection<Log> findAll();
+    <T extends Log> Collection<T> findAll(Class<T> logClass);
 }

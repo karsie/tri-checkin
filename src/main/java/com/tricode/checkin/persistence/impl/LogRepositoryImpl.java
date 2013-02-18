@@ -47,12 +47,13 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
     }
 
     @Override
-    public StatusChangeLog getLastChangeByUserIdAndStatus(int userId, LocationStatus status) {
+    public StatusChangeLog getPreviousChangeByUserIdAndStatusFromTimestamp(int userId, LocationStatus status, long timestamp) {
         final QueryBuilderFactory.SimpleQueryBuilder<StatusChangeLog> builder = queryBuilderFactory
                 .newBuilder(StatusChangeLog.class);
 
         builder.and(builder.equal(StatusChangeLog_.userId, userId),
-                builder.equal(StatusChangeLog_.statusTo, status))
+                builder.equal(StatusChangeLog_.statusTo, status),
+                builder.lessThan(StatusChangeLog_.timestamp, timestamp))
                 .orderBy(StatusChangeLog_.timestamp, false);
         try {
             return entityManager.createQuery(builder.toQuery()).setMaxResults(1).getSingleResult();
@@ -62,7 +63,9 @@ public class LogRepositoryImpl extends AbstractRepository<Log> implements LogRep
     }
 
     @Override
-    public Collection<Log> findAll() {
-        return entityManager.createQuery(queryBuilderFactory.newBuilder(Log.class).orderBy(Log_.id, true).toQuery()).getResultList();
+    public <T extends Log> Collection<T> findAll(Class<T> logClass) {
+        final CriteriaQuery<T> query = queryBuilderFactory.newBuilder(logClass).orderBy(Log_.id, true).toQuery();
+
+        return entityManager.createQuery(query).getResultList();
     }
 }
