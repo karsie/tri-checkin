@@ -5,7 +5,7 @@ var Today = new Date();
 var Employee = Backbone.Model.extend({
     urlRoot: contextRoot + "/checkin/rest/person",
 	getShortNotation: function(attribute) {
-		return this.get(attribute).substring(0, 2);
+		return this.get(attribute);
 	},
 
     isBirthday: function() {
