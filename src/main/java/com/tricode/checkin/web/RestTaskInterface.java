@@ -16,5 +16,6 @@ public interface RestTaskInterface {
     Collection<RunnableTaskMetadata> list();
 
     @RequestMapping(value = "run", method = RequestMethod.POST)
-    void run(@RequestBody RunnableTaskMetadata taskMetadata);
+    @ResponseBody
+    boolean run(@RequestBody RunnableTaskMetadata taskMetadata);
 }

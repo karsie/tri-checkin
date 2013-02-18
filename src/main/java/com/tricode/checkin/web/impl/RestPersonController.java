@@ -3,16 +3,23 @@ package com.tricode.checkin.web.impl;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
 import com.tricode.checkin.web.RestPersonInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collection;
 
 @Controller
 public class RestPersonController implements RestPersonInterface {
+
+    private static final Logger log = LoggerFactory.getLogger(RestPersonController.class);
 
     private final PersonService personService;
 
@@ -39,5 +46,11 @@ public class RestPersonController implements RestPersonInterface {
         Assert.notNull(person, "Parameter 'person' can not be empty");
 
         return personService.save(person);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public void exception(Exception e) {
+        log.error("error in controller", e);
     }
 }

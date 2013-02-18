@@ -12,6 +12,9 @@ public class RunnableTaskMetadata implements Serializable {
 
     private String schedule;
 
+    public RunnableTaskMetadata() {
+    }
+
     public RunnableTaskMetadata(Class<? extends RunnableTask> taskClass, String description, String schedule) {
         this.taskClass = taskClass.getSimpleName();
         this.description = description;
