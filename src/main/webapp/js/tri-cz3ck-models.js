@@ -28,7 +28,7 @@ var Employee = Backbone.Model.extend({
 var Employees = Backbone.Collection.extend({
     model: Employee,
     url: contextRoot + "/checkin/rest/person/list",
-	sortAttribute: "last",
+	sortAttribute: "first",
 
     initialize: function(attributes, options) {
         var l_options = options || {};
@@ -53,7 +53,7 @@ var Employees = Backbone.Collection.extend({
 
 var EmployeesByStatus = Backbone.Subset.extend({
 	liveupdate_keys: ["status"],
-	sortAttribute: "last",
+	sortAttribute: "first",
 	
 	initialize: function(models, options) {
 		this.status = options.status;
