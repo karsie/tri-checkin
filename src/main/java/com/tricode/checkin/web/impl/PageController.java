@@ -11,8 +11,14 @@ public class PageController {
         return "panel";
     }
 
-    @RequestMapping("report")
-    public void report() {
+    @RequestMapping("report/week")
+    public String reportPerWeek() {
+        return "report_week";
+    }
+
+    @RequestMapping("report/month")
+    public String reportPerMonth() {
+        return "report_month";
     }
 
     @RequestMapping("tasks")

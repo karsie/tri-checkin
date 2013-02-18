@@ -3,6 +3,7 @@ package com.tricode.checkin.event.manager;
 import com.tricode.checkin.event.EventType;
 import com.tricode.checkin.event.listener.EventListener;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,12 @@ public class DefaultEventManager implements EventManager {
     private static final ThreadLocal<Boolean> threadRunState = new ThreadLocal<Boolean>();
 
     public DefaultEventManager() {
-        threadRunState.set(Boolean.TRUE);
     }
 
     @PreDestroy
     private void destroy() {
         executor.shutdown();
+        threadRunState.remove();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class DefaultEventManager implements EventManager {
     }
 
     private <T> void doRaiseEvent(EventListenerRunner<T> runner) {
-        if (threadRunState.get()) {
+        if (threadRunState.get() == null || threadRunState.get()) {
             if (eventListeners != null) {
                 executor.execute(new EventListenersStarter<T>(eventListeners, executor, runner));
             }

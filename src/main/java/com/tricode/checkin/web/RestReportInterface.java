@@ -1,5 +1,6 @@
 package com.tricode.checkin.web;
 
+import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.WeekReport;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +17,23 @@ public interface RestReportInterface {
     @ResponseBody
     Collection<WeekReport> listWeekReport(@RequestParam Integer year, @RequestParam Integer week);
 
-    @RequestMapping(value = "list/years", method = RequestMethod.GET)
+    @RequestMapping(value = "list/week/years", method = RequestMethod.GET)
     @ResponseBody
-    Collection<Integer> listYears();
+    Collection<Integer> weekReportYears();
 
-    @RequestMapping(value = "list/weeks/{year}", method = RequestMethod.GET)
+    @RequestMapping(value = "list/week/weeks/{year}", method = RequestMethod.GET)
     @ResponseBody
-    Collection<Integer> listWeeks(@PathVariable Integer year);
+    Collection<Integer> weekReportWeeks(@PathVariable Integer year);
+
+    @RequestMapping(value = "list/month", method = RequestMethod.GET)
+    @ResponseBody
+    Collection<MonthReport> listMonthReport(@RequestParam Integer year, @RequestParam Integer month);
+
+    @RequestMapping(value = "list/month/years", method = RequestMethod.GET)
+    @ResponseBody
+    Collection<Integer> monthReportYears();
+
+    @RequestMapping(value = "list/month/months/{year}", method = RequestMethod.GET)
+    @ResponseBody
+    Collection<Integer> monthReportMonths(@PathVariable Integer year);
 }

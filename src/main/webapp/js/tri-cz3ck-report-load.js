@@ -29,14 +29,26 @@ requirejs.config({
 });
 
 define(["tri-cz3ck-report-views"], function () {
-    var reportList = new WeekReportDataList();
-    var employees = new Employees();
+    var employees = new Employees(null, {sortAttribute: "first"});
     $(function() {
-        var report = new WeekReportListView({id: "report", collection: employees, reportDetails: reportList });
-        report.filterChange(function (year, week) {
-            reportList.fetch({data: {year: year, week: week}, success: function() {
-                employees.fetch();
-            }});
-        });
+        if ($("#report_week").length !== 0) {
+            var weekReportList = new WeekReportList();
+            var weekReport = new WeekReportListView({id: "report_week", collection: employees, reportDetails: weekReportList});
+            weekReport.filterChange(function (year, week) {
+                weekReportList.fetch({data: {year: year, week: week}, success: function() {
+                    employees.fetch();
+                }});
+            });
+        }
+
+        if ($("#report_month").length !== 0) {
+            var monthReportList = new MonthReportList();
+            var monthReport = new MonthReportListView({id: "report_month", collection: employees, reportDetails: monthReportList});
+            monthReport.filterChange(function (year, month) {
+                monthReportList.fetch({data: {year: year, month: month}, success: function() {
+                    employees.fetch();
+                }});
+            });
+        }
     });
 });

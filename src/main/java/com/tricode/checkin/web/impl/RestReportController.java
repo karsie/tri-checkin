@@ -1,5 +1,6 @@
 package com.tricode.checkin.web.impl;
 
+import com.tricode.checkin.model.MonthReport;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.model.WeekReport;
 import com.tricode.checkin.service.PersonService;
@@ -39,12 +40,35 @@ public class RestReportController implements RestReportInterface {
     }
 
     @Override
-    public Collection<Integer> listYears() {
+    public Collection<Integer> weekReportYears() {
         return reportingService.listWeekReportYears();
     }
 
     @Override
-    public Collection<Integer> listWeeks(@PathVariable Integer year) {
+    public Collection<Integer> weekReportWeeks(@PathVariable Integer year) {
         return reportingService.listWeekReportWeeks(year);
+    }
+
+    @Override
+    public Collection<MonthReport> listMonthReport(@RequestParam Integer year, @RequestParam Integer month) {
+        final Collection<Person> persons = personService.list();
+
+        final Collection<MonthReport> results = new ArrayList<MonthReport>(persons.size());
+
+        for (Person person : persons) {
+            results.add(reportingService.getMonth(person.getId(), year, month));
+        }
+
+        return results;
+    }
+
+    @Override
+    public Collection<Integer> monthReportYears() {
+        return reportingService.listMonthReportYears();
+    }
+
+    @Override
+    public Collection<Integer> monthReportMonths(@PathVariable Integer year) {
+        return reportingService.listMonthReportMonths(year);
     }
 }

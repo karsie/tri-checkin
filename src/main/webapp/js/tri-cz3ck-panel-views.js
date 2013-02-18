@@ -7,7 +7,7 @@ var EmployeeListView = Backbone.View.extend({
 		this.pageViews = [];
 		this.clearListeners = [];
 		
-		if (typeof this.options.buttons != "undefined") {
+		if (typeof(this.options.buttons) !== "undefined") {
 			this.renderButtons(this.options.buttons);
 		}
         this.renderTitle();

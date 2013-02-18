@@ -34,7 +34,7 @@ public class RestTaskController implements RestTaskInterface {
     @Override
     public void run(@RequestBody RunnableTaskMetadata taskMetadata) {
         for (RunnableTask task : tasks) {
-            if (task.getClass().equals(taskMetadata.getTaskClass())) {
+            if (task.getClass().getName().equals(taskMetadata.getTaskClass())) {
                 task.runTask();
             }
         }

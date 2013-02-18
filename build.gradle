@@ -23,10 +23,8 @@ ext {
 	slf4j_version  = "1.7.2"
 }
 
-if (hasProperty("xlint")) {
-    tasks.withType(Compile) {
-        options.compilerArgs << "-Xlint:-options"
-    }
+tasks.withType(Compile) {
+    options.compilerArgs << "-Xlint:-options,-unchecked"
 }
 
 dependencies {

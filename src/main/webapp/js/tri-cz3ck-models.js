@@ -3,7 +3,7 @@ var ONE_DAY = 1000 * 60 * 60 * 24;
 var Today = new Date();
 
 var Employee = Backbone.Model.extend({
-    urlRoot: "../checkin/rest/person",
+    urlRoot: contextRoot + "/checkin/rest/person",
 	getShortNotation: function(attribute) {
 		return this.get(attribute).substring(0, 2);
 	},
@@ -27,8 +27,15 @@ var Employee = Backbone.Model.extend({
 
 var Employees = Backbone.Collection.extend({
     model: Employee,
-    url: "../checkin/rest/person/list",
+    url: contextRoot + "/checkin/rest/person/list",
 	sortAttribute: "last",
+
+    initialize: function(attributes, options) {
+        var l_options = options || {};
+        if (typeof(l_options.sortAttribute) !== "undefined") {
+            this.sortAttribute = l_options.sortAttribute;
+        }
+    },
 	
 	comparator: function(model) {
 		return model.get(this.sortAttribute);
@@ -70,11 +77,29 @@ var EmployeesByStatus = Backbone.Subset.extend({
 	}
 });
 
-var WeekReportData = Backbone.Model.extend({
+var WeekReport = Backbone.Model.extend({
     idAttribute: "userId"
 });
 
-var WeekReportDataList = Backbone.Collection.extend({
-    model: WeekReportData,
-    url: "../checkin/rest/report/list/week"
+var WeekReportList = Backbone.Collection.extend({
+    model: WeekReport,
+    url: contextRoot + "/checkin/rest/report/list/week"
+});
+
+var MonthReport = Backbone.Model.extend({
+    idAttribute: "userId"
+});
+
+var MonthReportList = Backbone.Collection.extend({
+    model: MonthReport,
+    url: contextRoot + "/checkin/rest/report/list/month"
+});
+
+var Task = Backbone.Model.extend({
+    idAttribute: "taskClass"
+});
+
+var TaskList = Backbone.Collection.extend({
+    model: Task,
+    url: contextRoot + "/checkin/rest/task/list"
 });

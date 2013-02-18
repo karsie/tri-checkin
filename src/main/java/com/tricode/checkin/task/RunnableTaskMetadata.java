@@ -6,27 +6,39 @@ public class RunnableTaskMetadata implements Serializable {
 
     private static final long serialVersionUID = -854343822085941867L;
 
-    private final Class<? extends RunnableTask> taskClass;
+    private String taskClass;
 
-    private final String description;
+    private String description;
 
-    private final String schedule;
+    private String schedule;
 
     public RunnableTaskMetadata(Class<? extends RunnableTask> taskClass, String description, String schedule) {
-        this.taskClass = taskClass;
+        this.taskClass = taskClass.getSimpleName();
         this.description = description;
         this.schedule = schedule;
     }
 
-    public Class<? extends RunnableTask> getTaskClass() {
+    public String getTaskClass() {
         return taskClass;
+    }
+
+    public void setTaskClass(String taskClass) {
+        this.taskClass = taskClass;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getSchedule() {
         return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 }
