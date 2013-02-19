@@ -1,6 +1,5 @@
 package com.tricode.checkin.persistence;
 
-import com.tricode.checkin.persistence.Repository;
 import com.tricode.checkin.persistence.impl.QueryBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 

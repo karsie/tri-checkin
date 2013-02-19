@@ -6,8 +6,10 @@ import com.tricode.checkin.service.LogService;
 import com.tricode.checkin.service.ReportingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 public class RebuildReportsOnDemandTask implements RunnableTask {
 
     private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(RebuildReportsOnDemandTask.class, "Rebuilds all reports from the available logs", "On demand");

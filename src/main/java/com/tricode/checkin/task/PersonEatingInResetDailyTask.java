@@ -6,10 +6,12 @@ import com.tricode.checkin.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 @Component
+@Transactional
 public class PersonEatingInResetDailyTask implements RunnableTask {
 
     private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(PersonEatingInResetDailyTask.class,
