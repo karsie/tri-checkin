@@ -91,7 +91,7 @@ public class UserReportRepositoryImpl extends AbstractRepository<UserReport> imp
 
     @Override
     public <T extends UserReport> void clearAll(Class<T> userReportClass) {
-        final CriteriaQuery<T> query = queryBuilderFactory.newBuilder(userReportClass).orderBy(UserReport_.id, true).toQuery();
+        final CriteriaQuery<T> query = queryBuilderFactory.newBuilder(userReportClass).toQuery();
 
         for (T userReport : entityManager.createQuery(query).getResultList()) {
             entityManager.remove(userReport);
