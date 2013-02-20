@@ -32,6 +32,10 @@ public class RebuildReportsOnDemandTask implements RunnableTask {
         reportingService.clear();
         for (Log log : logService.list()) {
             eventManager.raiseCreateEvent(log);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
         }
     }
 
