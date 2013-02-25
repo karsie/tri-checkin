@@ -3,7 +3,6 @@ package com.tricode.checkin.event.manager;
 import com.tricode.checkin.event.EventType;
 import com.tricode.checkin.event.listener.EventListener;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
