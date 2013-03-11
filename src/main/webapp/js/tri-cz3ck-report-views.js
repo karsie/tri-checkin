@@ -364,6 +364,7 @@ var MonthReportItemView = Backbone.View.extend({
         }
 
         var $eatingIn = $(elementId + "EatingIn");
+        $eatingIn.html('');
 
         var year = this.options.report.get("year");
         var month = this.options.report.get("month") - 1;
