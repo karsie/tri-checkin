@@ -93,7 +93,7 @@ var WeekReportFilterView = Backbone.View.extend({
 });
 
 var WeekReportItemView = Backbone.View.extend({
-    template: _.template('<div id="emp<%= id %>" class="centered_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span><br/><span id="emp<%= id %>EatingIn" class="smallprint"></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70">canvas</canvas><div class="clear"></div></div>'),
+    template: _.template('<div id="emp<%= id %>" class="centered_item ui-widget-content ui-corner-all"><div class="left"><span><%= name %></span><br/><span id="emp<%= id %>EatingIn" class="smallprint"></span><br/><span id="emp<%= id %>Active" class="smallprint"></span></div><canvas id="emp<%= id %>Canvas" class="right" width="458" height="70">canvas</canvas><div class="clear"></div></div>'),
 
     render: function(parent) {
         var elementId = "#emp" + this.model.get("id");
@@ -108,6 +108,7 @@ var WeekReportItemView = Backbone.View.extend({
         this.drawTooltip($canvas);
 
         this.updateEatingIn($(elementId + "EatingIn"), this.options.report.get("eatingIn"));
+        $(elementId + "Active").html(this.model.get("active") === true ? "" : "(Inactief)");
 
         var days = this.options.report.get("days");
         var maxMillis = _.max(days);

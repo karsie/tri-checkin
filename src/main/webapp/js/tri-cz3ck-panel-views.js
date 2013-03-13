@@ -13,6 +13,7 @@ var EmployeeListView = Backbone.View.extend({
         this.renderTitle();
 
         this.collection.bind("reset", this.render, this);
+        this.collection.bind("sort", this.render, this);
     },
 
 	clear: function(delegate) {
@@ -236,16 +237,16 @@ var EmployeeView = Backbone.View.extend({
         var enabledState = {primary: "tri-icon-eating-in"};
         var disabledState = {primary: "tri-icon-eating-out"};
 
-        var $button = $(document.createElement("button")).html("Ik eet mee");
+        var $button = $(document.createElement("button")).attr("id", "emp" + this.model.get("id") + "EatingInBtn").html("Ik eet mee");
         $button.button({text: false, icons: (this.model.get("eatingIn") ? enabledState : disabledState)}).click(this.model, function (event) {
                 if (event.data.get("eatingIn")) {
                     event.data.set("eatingIn", false);
                     event.data.save();
-                    $(event.currentTarget).button("option", "icons", disabledState);
+                    $(event.currentTarget).button({ icons: disabledState });
                 } else {
                     event.data.set("eatingIn", true);
                     event.data.save();
-                    $(event.currentTarget).button("option", "icons", enabledState);
+                    $(event.currentTarget).button({ icons: enabledState });
                 }
             }).addClass("fff-icon");
         return $button;

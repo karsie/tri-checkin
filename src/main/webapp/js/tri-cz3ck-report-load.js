@@ -1,23 +1,23 @@
 requirejs.config({
     shim: {
-        "libs/backbone-min": {
-            deps: ["libs/underscore-min", "libs/jquery-min"],
+        "libs/backbone": {
+            deps: ["libs/underscore", "libs/jquery"],
             exports: "Backbone"
         },
-        "libs/jquery-ui-min": {
-            deps: ["libs/jquery-min", "libs/require-css"],
+        "libs/jquery-ui": {
+            deps: ["libs/jquery", "libs/require-css"],
             init: function () {
-                requireCss("libs/jquery-ui-min");
+                requireCss("libs/jquery-ui");
             }
         },
-        "libs/jcanvas-min": {
-            deps: ["libs/jquery-min"]
+        "libs/jcanvas": {
+            deps: ["libs/jquery"]
         },
         "tri-cz3ck-models": {
-            deps: ["libs/backbone-min"]
+            deps: ["libs/backbone"]
         },
         "tri-cz3ck-report-views": {
-            deps: ["tri-cz3ck-models", "libs/jquery-ui-min", "libs/jcanvas-min", "libs/require-css"],
+            deps: ["tri-cz3ck-models", "libs/jquery-ui", "libs/jcanvas", "libs/require-css"],
             init: function() {
                 requireCss("tri-cz3ck");
             }
