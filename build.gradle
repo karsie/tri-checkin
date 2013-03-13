@@ -84,3 +84,9 @@ jettyRun.doFirst {
     System.setProperty('xmlDataFile', 'Data.local.xml,Data.xml')
 }
 
+war.webInf {
+    from("src/main/libs/") {
+        include "sqljdbc4.jar" // sqljdbc_4.0.2206.100_enu
+    }
+    into "/WEB-INF/lib/"
+}
