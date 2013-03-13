@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,8 +37,8 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
     private static final Logger log = LoggerFactory.getLogger(ReloadEmployeesXmlDailyTask.class);
 
     private static final RunnableTaskMetadata METADATA = new RunnableTaskMetadata(ReloadEmployeesXmlDailyTask.class,
-            "Reads ${checkin.xml.file} and adds/updates personal info",
-            "At startup and every day, at 03:00");
+                                                                                  "Reads ${checkin.xml.file} and adds/updates personal info",
+                                                                                  "At startup and every day, at 03:00");
 
     private final CheckinConfig checkinConfig;
     private final PersonService personService;
@@ -92,7 +94,9 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
         final String[] xmlFilePaths = StringUtils.split(checkinConfig.getXmlFile(), ',');
         if (xmlFilePaths != null) {
             for (String xmlFilePath : xmlFilePaths) {
-                if (importXmlFile(xmlFilePath, XmlEmployees.class)) break;
+                if (importXmlFile(xmlFilePath, XmlEmployees.class)) {
+                    break;
+                }
             }
         }
     }
@@ -120,17 +124,22 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
 
     private <T> void importXmlObjects(T xmlObjects, Class<T> xmlClass) {
         if (xmlClass.equals(XmlEmployees.class)) {
-            importXmlEmployees((XmlEmployees) xmlObjects);
+            final XmlEmployees xmlEmployees = (XmlEmployees) xmlObjects;
+
+            importXmlEmployees(xmlEmployees);
+            activateOrDeactivateExistingPersons(xmlEmployees);
         }
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     private void importXmlEmployees(XmlEmployees employees) {
         int newPersons = 0;
         int updatedPersons = 0;
         for (XmlEmployee employee : employees.getEmployees()) {
             Person person = personService.getByExternalId(employee.getId());
             if (person == null) {
-                person = Person.Builder.empty().withExternalId(employee.getId()).withStatus(LocationStatus.OUT).get();
+                person = Person.Builder.empty().withExternalId(employee.getId()).withStatus(LocationStatus.OUT)
+                        .withActive(true).get();
                 newPersons++;
             } else {
                 updatedPersons++;
@@ -158,6 +167,45 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
             log.debug("imported person [{}] - [{}]", saved.getId(), employee.getName());
         }
         log.info("imported {} new person(s), {} updated", newPersons, updatedPersons);
+    }
+
+    @Transactional(propagation = Propagation.NESTED)
+    private void activateOrDeactivateExistingPersons(XmlEmployees employees) {
+        final Collection<Person> persons = personService.list();
+        int activatedPersons = 0;
+        int deactivatedPersons = 0;
+        for (Person person : persons) {
+            final XmlEmployee employee = findXmlEmployee(employees, person.getExternalId());
+            if (person.isActive()) {
+                if (employee == null) {
+                    person.setActive(false);
+                    personService.save(person);
+                    deactivatedPersons++;
+                    log.debug("deactivated person [{}] - [{}]", person.getId(), person.getName());
+                }
+            } else {
+                if (employee != null) {
+                    person.setActive(true);
+                    personService.save(person);
+                    activatedPersons++;
+                    log.debug("reactivated person [{}] - [{}]", person.getId(), person.getName());
+                }
+            }
+        }
+        if (activatedPersons > 0 || deactivatedPersons > 0) {
+            log.info("activated {} persons, {} deactivated", activatedPersons, deactivatedPersons);
+        }
+    }
+
+    private static XmlEmployee findXmlEmployee(XmlEmployees employees, String externalId) {
+        if (externalId != null) {
+            for (XmlEmployee employee : employees.getEmployees()) {
+                if (externalId.equals(employee.getId())) {
+                    return employee;
+                }
+            }
+        }
+        return null;
     }
 
     private static String parseLastName(String[] nameParts) {

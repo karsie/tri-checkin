@@ -44,4 +44,27 @@ public class RunnableTaskMetadata implements Serializable {
     public void setSchedule(String schedule) {
         this.schedule = schedule;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        RunnableTaskMetadata that = (RunnableTaskMetadata) o;
+
+        if (!taskClass.equals(that.taskClass)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return taskClass.hashCode();
+    }
 }

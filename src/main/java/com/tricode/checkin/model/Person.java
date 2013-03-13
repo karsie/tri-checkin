@@ -41,6 +41,8 @@ public class Person implements Serializable, Cloneable {
 
     private Calendar startDate;
 
+    private boolean active;
+
     public Integer getId() {
         return id;
     }
@@ -113,6 +115,14 @@ public class Person implements Serializable, Cloneable {
         this.startDate = startDate;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -123,6 +133,9 @@ public class Person implements Serializable, Cloneable {
                 ", last='" + last + '\'' +
                 ", status=" + status +
                 ", eatingIn=" + eatingIn +
+                ", birthDate=" + birthDate +
+                ", startDate=" + startDate +
+                ", active=" + active +
                 '}';
     }
 
@@ -176,6 +189,11 @@ public class Person implements Serializable, Cloneable {
 
         public Builder withStatus(LocationStatus status) {
             person.setStatus(status);
+            return this;
+        }
+
+        public Builder withActive(boolean active) {
+            person.setActive(active);
             return this;
         }
 

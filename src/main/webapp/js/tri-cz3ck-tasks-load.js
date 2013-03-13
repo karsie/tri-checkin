@@ -4,9 +4,6 @@ requirejs.config({
             deps: ["libs/underscore-min", "libs/jquery-min"],
             exports: "Backbone"
         },
-        "libs/backbone.subset": {
-            deps: ["libs/backbone-min"]
-        },
         "libs/jquery-ui-min": {
             deps: ["libs/jquery-min", "libs/require-css"],
             init: function () {
@@ -14,7 +11,7 @@ requirejs.config({
             }
         },
         "tri-cz3ck-models": {
-            deps: ["libs/backbone-min", "libs/backbone.subset"]
+            deps: ["libs/backbone-min"]
         },
         "tri-cz3ck-tasks-views": {
             deps: ["tri-cz3ck-models", "libs/jquery-ui-min", "libs/require-css"],

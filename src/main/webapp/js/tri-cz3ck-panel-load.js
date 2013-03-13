@@ -4,9 +4,6 @@ requirejs.config({
             deps: ["libs/underscore-min", "libs/jquery-min"],
             exports: "Backbone"
         },
-        "libs/backbone.subset": {
-            deps: ["libs/backbone-min"]
-        },
         "libs/jquery-ui-min": {
             deps: ["libs/jquery-min", "libs/require-css"],
             init: function () {
@@ -14,7 +11,7 @@ requirejs.config({
             }
         },
         "tri-cz3ck-models": {
-            deps: ["libs/backbone-min", "libs/backbone.subset"]
+            deps: ["libs/backbone-min"]
         },
         "tri-cz3ck-panel-views": {
             deps: ["tri-cz3ck-models", "libs/jquery-ui-min", "libs/require-css"],
@@ -29,8 +26,8 @@ requirejs.config({
 
 define(["tri-cz3ck-panel-views"], function () {
     var all = new Employees();
-    var outside = new EmployeesByStatus(undefined, { parent: all, status: "OUT" });
-    var inside = new EmployeesByStatus(undefined, { parent: all, status: "IN" });
+    var outside = new Employees();
+    var inside = new Employees();
 
     $(function () {
         var genericSortOptions = [
@@ -51,7 +48,11 @@ define(["tri-cz3ck-panel-views"], function () {
         leftView.options.targetView = rightView;
         rightView.options.targetView = leftView;
 
-        all.fetch();
+        all.fetch({success: function() {
+            unbindSubsets();
+            filterSubsets();
+            bindSubsets();
+        }});
 
         setInterval(function() {
             rightView.disable();
@@ -61,4 +62,19 @@ define(["tri-cz3ck-panel-views"], function () {
             leftView.enable();
         }, 2 * 60 * 60 * 1000);
     });
+
+    function filterSubsets() {
+        outside.reset(all.filterActiveAndStatus(true, "OUT"));
+        inside.reset(all.filterActiveAndStatus(true, "IN"));
+    }
+
+    function unbindSubsets() {
+        outside.unbind("change", filterSubsets);
+        inside.unbind("change", filterSubsets);
+    }
+
+    function bindSubsets() {
+        outside.bind("change", filterSubsets);
+        inside.bind("change", filterSubsets);
+    }
 });

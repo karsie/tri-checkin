@@ -48,33 +48,13 @@ var Employees = Backbone.Collection.extend({
 
     getSortAttribute: function() {
         return this.sortAttribute;
-    }
-});
+    },
 
-var EmployeesByStatus = Backbone.Subset.extend({
-	liveupdate_keys: ["status"],
-	sortAttribute: "first",
-	
-	initialize: function(models, options) {
-		this.status = options.status;
-	},
-	
-	sieve: function(model) {
-		return model.get("status") == this.status;
-	},
-	
-	allOut: function() {
-		this.forEach(function(model) { model.set({ status: "OUT" }); model.save(); });
-	},
-	
-	sortByAttribute: function(attribute) {
-		this.sortAttribute = attribute;
-		this.sort();
-	},
-	
-	getSortAttribute: function() {
-		return this.sortAttribute;
-	}
+    filterActiveAndStatus: function(active, status) {
+        return this.filter(function (e) {
+            return e.get("active") === active && e.get("status") === status;
+        });
+    }
 });
 
 var WeekReport = Backbone.Model.extend({

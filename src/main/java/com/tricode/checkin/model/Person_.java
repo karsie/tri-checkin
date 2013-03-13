@@ -24,4 +24,6 @@ public class Person_ {
     public static volatile SingularAttribute<Person, Calendar> birthDate;
 
     public static volatile SingularAttribute<Person, Calendar> startDate;
+
+    public static volatile SingularAttribute<Person, Boolean> active;
 }
