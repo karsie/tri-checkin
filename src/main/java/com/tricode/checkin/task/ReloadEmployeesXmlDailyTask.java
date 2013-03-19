@@ -4,6 +4,7 @@ import com.tricode.checkin.config.CheckinConfig;
 import com.tricode.checkin.model.LocationStatus;
 import com.tricode.checkin.model.Person;
 import com.tricode.checkin.service.PersonService;
+import com.tricode.checkin.xml.ConfigurableCalendarAdapter;
 import com.tricode.checkin.xml.XmlEmployee;
 import com.tricode.checkin.xml.XmlEmployees;
 import org.apache.commons.io.IOUtils;
@@ -58,6 +59,7 @@ public class ReloadEmployeesXmlDailyTask implements RunnableTask {
         try {
             JAXBContext context = JAXBContext.newInstance(XmlEmployees.class);
             unmarshaller = context.createUnmarshaller();
+            unmarshaller.setAdapter(new ConfigurableCalendarAdapter(checkinConfig.getXmlDateFormat()));
         } catch (JAXBException e) {
             log.error("error while initializing jaxb", e);
             unmarshaller = null;

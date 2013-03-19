@@ -12,6 +12,7 @@ var WeekReportListView = Backbone.View.extend({
     },
 
     render: function() {
+        this.$(".centered_item").hide();
         this.collection.forEach(this.renderOne, this);
     },
 
@@ -30,54 +31,61 @@ var WeekReportListView = Backbone.View.extend({
         this.filterChangeHandler = delegate;
     },
 
-    triggerFilterChange: function(year, week) {
+    triggerFilterChange: function(year, week, showInactive) {
         if (typeof(this.filterChangeHandler) !== "undefined" && this.filterChangeHandler !== null) {
-            this.filterChangeHandler(year, week);
+            this.filterChangeHandler(year, week, showInactive);
         }
     }
 });
 
 var WeekReportFilterView = Backbone.View.extend({
-    template: _.template('<div id="filter" class="centered_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div></div>'),
+    template: _.template('<div id="filter" class="centered_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_week" class="report_filter_item"><span>Selecteer week:</span><select id="select_week"></select></div><div id="filter_inactive" class="report_filter_item"><span>Toon inactieve medewerkers:</span><input type="checkbox" id="check_inactive"></select></div></div>'),
 
     render: function(parentView) {
         var elementId = "#filter";
         if ($(elementId).length === 0) {
             parentView.$el.append(this.template());
+        } else {
+            $(elementId).show();
         }
 
-        var filter_week = $("#filter_week");
-        filter_week.hide();
+        var $filter_week = $("#filter_week");
+        $filter_week.hide();
 
-        var select_week = $("#select_week");
-        var select_year = $("#select_year");
+        var $select_week = $("#select_week");
+        var $select_year = $("#select_year");
+        var $showInactive = $("#check_inactive");
 
-        select_week.change(function (event) {
-            parentView.triggerFilterChange(select_year.val(), event.currentTarget.value);
+        $select_week.change(function (event) {
+            parentView.triggerFilterChange($select_year.val(), event.currentTarget.value, $showInactive.is(":checked"));
         });
 
-        select_year.change(function (event) {
+        $showInactive.change(function () {
+            parentView.triggerFilterChange($select_year.val(), $select_week.val(), $showInactive.is(":checked"));
+        });
+
+        $select_year.change(function (event) {
             var year = event.currentTarget.value;
             $.getJSON(contextRoot + "/checkin/rest/report/list/week/weeks/" + year, function (data) {
-                var options = select_week.prop("options");
-                $("option", select_week).remove();
+                var options = $select_week.prop("options");
+                $("option", $select_week).remove();
 
-                filter_week.show();
+                $filter_week.show();
                 if (data.length === 0) {
                     options[options.length] = new Option("Nothing", -1);
                 } else {
                     _.each(data, function(week) {
                         options[options.length] = new Option(week, week);
                     });
-                    select_week.val(_.max(data));
-                    select_week.trigger("change");
+                    $select_week.val(_.max(data));
+                    $select_week.trigger("change");
                 }
             });
         });
 
         $.getJSON(contextRoot + "/checkin/rest/report/list/week/years", function (data) {
-            var options = select_year.prop("options");
-            $("option", select_year).remove();
+            var options = $select_year.prop("options");
+            $("option", $select_year).remove();
 
             if (data.length === 0) {
                 options[options.length] = new Option("Nothing", -1);
@@ -85,8 +93,8 @@ var WeekReportFilterView = Backbone.View.extend({
                 _.each(data, function(year) {
                     options[options.length] = new Option(year, year);
                 });
-                select_year.val(Today.getFullYear());
-                select_year.trigger("change");
+                $select_year.val(Today.getFullYear());
+                $select_year.trigger("change");
             }
         });
     }
@@ -102,6 +110,7 @@ var WeekReportItemView = Backbone.View.extend({
             parent.append(this.template(this.model.toJSON()));
             $el = $(elementId);
         }
+        $el.show();
 
         this.setElement($el);
         var $canvas = $(elementId + "Canvas");
@@ -274,6 +283,7 @@ var MonthReportListView = Backbone.View.extend({
     },
 
     render: function() {
+        this.$(".centered_item").hide();
         this.collection.forEach(this.renderOne, this);
     },
 
@@ -292,54 +302,61 @@ var MonthReportListView = Backbone.View.extend({
         this.filterChangeHandler = delegate;
     },
 
-    triggerFilterChange: function(year, week) {
+    triggerFilterChange: function(year, week, showInactive) {
         if (typeof(this.filterChangeHandler) !== "undefined" && this.filterChangeHandler !== null) {
-            this.filterChangeHandler(year, week);
+            this.filterChangeHandler(year, week, showInactive);
         }
     }
 });
 
 var MonthReportFilterView = Backbone.View.extend({
-    template: _.template('<div id="filter" class="centered_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_month" class="report_filter_item"><span>Selecteer maand:</span><select id="select_month"></select></div></div>'),
+    template: _.template('<div id="filter" class="centered_header ui-widget-content ui-state-default ui-corner-all"><div id="filter_year" class="report_filter_item"><span>Selecteer jaar:</span><select id="select_year"></select></div><div id="filter_month" class="report_filter_item"><span>Selecteer maand:</span><select id="select_month"></select></div><div id="filter_inactive" class="report_filter_item"><span>Toon inactieve medewerkers:</span><input type="checkbox" id="check_inactive"></select></div></div>'),
 
     render: function(parentView) {
         var elementId = "#filter";
         if ($(elementId).length === 0) {
             parentView.$el.append(this.template());
+        } else {
+            $(elementId).show();
         }
 
-        var filter_month = $("#filter_month");
-        filter_month.hide();
+        var $filter_month = $("#filter_month");
+        $filter_month.hide();
 
-        var select_month = $("#select_month");
-        var select_year = $("#select_year");
+        var $select_month = $("#select_month");
+        var $select_year = $("#select_year");
+        var $showInactive = $("#check_inactive");
 
-        select_month.change(function (event) {
-            parentView.triggerFilterChange(select_year.val(), event.currentTarget.value);
+        $select_month.change(function (event) {
+            parentView.triggerFilterChange($select_year.val(), event.currentTarget.value, $showInactive.is(":checked"));
         });
 
-        select_year.change(function (event) {
+        $showInactive.change(function () {
+            parentView.triggerFilterChange($select_year.val(), $select_month.val(), $showInactive.is(":checked"));
+        });
+
+        $select_year.change(function (event) {
             var year = event.currentTarget.value;
             $.getJSON(contextRoot + "/checkin/rest/report/list/month/months/" + year, function (data) {
-                var options = select_month.prop("options");
-                $("option", select_month).remove();
+                var options = $select_month.prop("options");
+                $("option", $select_month).remove();
 
-                filter_month.show();
+                $filter_month.show();
                 if (data.length === 0) {
                     options[options.length] = new Option("Nothing", -1);
                 } else {
                     _.each(data, function(month) {
                         options[options.length] = new Option(MONTHNAMES[month - 1], month);
                     });
-                    select_month.val(_.max(data));
-                    select_month.trigger("change");
+                    $select_month.val(_.max(data));
+                    $select_month.trigger("change");
                 }
             });
         });
 
         $.getJSON(contextRoot + "/checkin/rest/report/list/week/years", function (data) {
-            var options = select_year.prop("options");
-            $("option", select_year).remove();
+            var options = $select_year.prop("options");
+            $("option", $select_year).remove();
 
             if (data.length === 0) {
                 options[options.length] = new Option("Nothing", -1);
@@ -347,8 +364,8 @@ var MonthReportFilterView = Backbone.View.extend({
                 _.each(data, function(year) {
                     options[options.length] = new Option(year, year);
                 });
-                select_year.val(Today.getFullYear());
-                select_year.trigger("change");
+                $select_year.val(Today.getFullYear());
+                $select_year.trigger("change");
             }
         });
     }
@@ -363,6 +380,7 @@ var MonthReportItemView = Backbone.View.extend({
         if ($el.length === 0) {
             parent.append(this.template(this.model.toJSON()));
         }
+        $el.show();
 
         var $eatingIn = $(elementId + "EatingIn");
         $eatingIn.html('');

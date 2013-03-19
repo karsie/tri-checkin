@@ -54,6 +54,12 @@ var Employees = Backbone.Collection.extend({
         return this.filter(function (e) {
             return e.get("active") === active && e.get("status") === status;
         });
+    },
+
+    filterActive: function(active) {
+        return this.filter(function (e) {
+            return e.get("active") == active;
+        });
     }
 });
 

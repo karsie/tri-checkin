@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 
 @Configuration
 @PropertySource("classpath:/checkin.properties")
@@ -22,6 +23,9 @@ public class CheckinConfig {
 
     @Value("${checkin.xml.file.encoding}")
     private String xmlFileEncoding;
+
+    @Value("${checkin.xml.date.format}")
+    private String xmlDateFormat;
 
     public String getXmlFile() {
         return xmlFile;
@@ -39,10 +43,21 @@ public class CheckinConfig {
         this.xmlFileEncoding = xmlFileEncoding;
     }
 
+    public String getXmlDateFormat() {
+        return xmlDateFormat;
+    }
+
+    protected void setXmlDateFormat(String xmlDateFormat) {
+        this.xmlDateFormat = xmlDateFormat;
+    }
+
     @PostConstruct
     private void loadConfig() throws IOException {
         if (!CharEncoding.isSupported(xmlFileEncoding)) {
             throw new UnsupportedEncodingException(xmlFileEncoding);
         }
+
+        // throws IllegalArgumentException if format is incorrect
+        new SimpleDateFormat(xmlDateFormat);
     }
 }

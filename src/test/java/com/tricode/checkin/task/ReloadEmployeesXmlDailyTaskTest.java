@@ -132,6 +132,7 @@ public class ReloadEmployeesXmlDailyTaskTest {
         private ValidUtf8Config() {
             try {
                 setXmlFile(new ClassPathResource("data-valid-utf8.xml").getFile().getCanonicalPath());
+                setXmlDateFormat("yyyy-MM-dd");
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
@@ -144,6 +145,7 @@ public class ReloadEmployeesXmlDailyTaskTest {
         private InvalidXmlConfig() {
             try {
                 setXmlFile(new ClassPathResource("data-invalid-xml.xml").getFile().getCanonicalPath());
+                setXmlDateFormat("yyyy-MM-dd");
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
@@ -156,6 +158,7 @@ public class ReloadEmployeesXmlDailyTaskTest {
         private FileNotFoundConfig() {
             setXmlFile("data-inexistent.xml");
             setXmlFileEncoding("UTF-8");
+            setXmlDateFormat("yyyy-MM-dd");
         }
     }
 
@@ -168,6 +171,7 @@ public class ReloadEmployeesXmlDailyTaskTest {
                 log.error(e.getMessage());
             }
             setXmlFileEncoding("ISO-8859-1");
+            setXmlDateFormat("yyyy-MM-dd");
         }
     }
 }

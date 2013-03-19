@@ -2,6 +2,7 @@ package com.tricode.checkin.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Calendar;
 
 @XmlRootElement(name = "employee")
@@ -50,6 +51,7 @@ public class XmlEmployee {
     }
 
     @XmlAttribute
+    @XmlJavaTypeAdapter(ConfigurableCalendarAdapter.class)
     public Calendar getBirthDate() {
         return birthDate;
     }
@@ -59,6 +61,7 @@ public class XmlEmployee {
     }
 
     @XmlAttribute
+    @XmlJavaTypeAdapter(ConfigurableCalendarAdapter.class)
     public Calendar getStartDate() {
         return startDate;
     }
